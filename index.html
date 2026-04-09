@@ -26,13 +26,11 @@
        Icon swaps: eye-open ↔ eye-closed
        ========================================== -->
   <button id="btn-hide-ui" aria-label="Toggle UI visibility" title="Hide UI">
-    <!-- Eye-open icon (visible state) -->
     <svg id="icon-eye-open" width="20" height="20" viewBox="0 0 24 24" fill="none"
          stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
       <circle cx="12" cy="12" r="3"/>
     </svg>
-    <!-- Eye-closed icon (hidden state) -->
     <svg id="icon-eye-closed" width="20" height="20" viewBox="0 0 24 24" fill="none"
          stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
          style="display:none;">
@@ -63,17 +61,17 @@
 
     <!-- ── Scene Selectors (bottom-left) ── -->
     <nav id="scene-selectors" aria-label="Scene selection">
-      <button class="scene-icon active" data-scene="library" aria-label="Haunted Library">
+      <button class="scene-icon active" data-scene="dollhouse" aria-label="Haunted Doll House">
         <div class="icon-placeholder"></div>
-        <span class="scene-label">Library</span>
+        <span class="scene-label">Doll House</span>
       </button>
-      <button class="scene-icon" data-scene="piano" aria-label="Candlelit Piano Room">
-        <div class="icon-placeholder"></div>
-        <span class="scene-label">Piano Room</span>
-      </button>
-      <button class="scene-icon" data-scene="garden" aria-label="Moonlit Garden">
+      <button class="scene-icon" data-scene="garden" aria-label="Fairy Garden">
         <div class="icon-placeholder"></div>
         <span class="scene-label">Garden</span>
+      </button>
+      <button class="scene-icon" data-scene="ballroom" aria-label="Vampire Ballroom">
+        <div class="icon-placeholder"></div>
+        <span class="scene-label">Ballroom</span>
       </button>
     </nav>
 
@@ -223,85 +221,58 @@
 
       <!-- Left: playlist covers -->
       <div class="playlist-covers">
-        <div class="playlist-cover-item active" data-playlist="midnight">
+        <div class="playlist-cover-item active" data-playlist="dollhouse">
           <div class="cover-placeholder"></div>
-          <div class="cover-label">Midnight</div>
-        </div>
-        <div class="playlist-cover-item" data-playlist="requiem">
-          <div class="cover-placeholder" style="background:var(--accent-crimson);"></div>
-          <div class="cover-label">Requiem</div>
+          <div class="cover-label">Doll House</div>
         </div>
         <div class="playlist-cover-item" data-playlist="garden">
+          <div class="cover-placeholder" style="background:var(--accent-crimson);"></div>
+          <div class="cover-label">Garden</div>
+        </div>
+        <div class="playlist-cover-item" data-playlist="ballroom">
           <div class="cover-placeholder" style="background:var(--accent-purple);"></div>
-          <div class="cover-label">Moonlit</div>
+          <div class="cover-label">Ballroom</div>
         </div>
       </div>
 
       <!-- Right: track list -->
       <div class="playlist-tracks">
         <div class="playlist-tracks-header">
-          <h3>Midnight</h3>
-          <div class="playlist-subtitle">8 tracks &middot; dark ambient</div>
+          <h3>Doll House</h3>
+          <div class="playlist-subtitle">Musicbox &middot; haunted</div>
         </div>
         <div class="playlist-track-list">
           <div class="playlist-track-item active">
             <span class="p-track-num">01</span>
             <div>
-              <div class="p-track-title">Midnight Requiem</div>
-              <div class="p-track-artist">Placeholder</div>
+              <div class="p-track-title">The Requiem in D minor, K. 626 (Classic.de)</div>
+              <div class="p-track-artist">Wolfgang Amadeus Mozart</div>
             </div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">02</span>
             <div>
-              <div class="p-track-title">Candlelit Reverie</div>
-              <div class="p-track-artist">Placeholder</div>
+              <div class="p-track-title">Lullaby / Wiegenlied - Op. 49, No. 4 (Classic.de)</div>
+              <div class="p-track-artist">Johannes Brahms</div>
             </div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">03</span>
             <div>
-              <div class="p-track-title">Rain on Stone</div>
-              <div class="p-track-artist">Placeholder</div>
+              <div class="p-track-title">Badinerie - BWV 1067 (Classic.de)</div>
+              <div class="p-track-artist">Johann Sebastian Bach</div>
             </div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">04</span>
             <div>
-              <div class="p-track-title">The Watcher's Lullaby</div>
-              <div class="p-track-artist">Placeholder</div>
-            </div>
-          </div>
-          <div class="playlist-track-item">
-            <span class="p-track-num">05</span>
-            <div>
-              <div class="p-track-title">Hollow Cathedral</div>
-              <div class="p-track-artist">Placeholder</div>
-            </div>
-          </div>
-          <div class="playlist-track-item">
-            <span class="p-track-num">06</span>
-            <div>
-              <div class="p-track-title">Veiled Procession</div>
-              <div class="p-track-artist">Placeholder</div>
-            </div>
-          </div>
-          <div class="playlist-track-item">
-            <span class="p-track-num">07</span>
-            <div>
-              <div class="p-track-title">Obsidian Halls</div>
-              <div class="p-track-artist">Placeholder</div>
-            </div>
-          </div>
-          <div class="playlist-track-item">
-            <span class="p-track-num">08</span>
-            <div>
-              <div class="p-track-title">Last Ember</div>
-              <div class="p-track-artist">Placeholder</div>
+              <div class="p-track-title">For Elise - WoO 59 (Classic.de)</div>
+              <div class="p-track-artist">Ludwig van Beethoven</div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
 
   </div><!-- /ui-overlay -->
