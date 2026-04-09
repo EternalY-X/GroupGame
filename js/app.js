@@ -1,6 +1,4 @@
 // app.js — Main controller
-// Wires together scenes, audio, and timer modules
-// app.js — Main controller
 // Wires together UI toggles for the wireframe pass
 
 (function () {
@@ -27,7 +25,6 @@
     playlistPopup.classList.toggle('open');
   });
 
-  // Close playlist if clicking outside
   document.addEventListener('click', (e) => {
     if (playlistPopup.classList.contains('open')
         && !playlistPopup.contains(e.target)
@@ -42,14 +39,13 @@
     cover.addEventListener('click', () => {
       document.querySelectorAll('.playlist-cover-item').forEach(c => c.classList.remove('active'));
       cover.classList.add('active');
-      // Update header text to match playlist name
       const label = cover.querySelector('.cover-label')?.textContent || '';
       const header = document.querySelector('.playlist-tracks-header h3');
       if (header) header.textContent = label;
     });
   });
 
-  // ── SFX list toggle ──
+  // ── SFX volume panel toggle ──
   const btnSfx  = document.getElementById('btn-sfx-toggle');
   const sfxList = document.getElementById('sfx-list');
 
@@ -57,7 +53,6 @@
     sfxList.classList.toggle('open');
   });
 
-  // Close SFX list if clicking outside
   document.addEventListener('click', (e) => {
     if (sfxList.classList.contains('open')
         && !sfxList.contains(e.target)
@@ -65,13 +60,6 @@
         && !btnSfx.contains(e.target)) {
       sfxList.classList.remove('open');
     }
-  });
-
-  // ── SFX toggle switches ──
-  document.querySelectorAll('.sfx-toggle').forEach(toggle => {
-    toggle.addEventListener('click', () => {
-      toggle.classList.toggle('on');
-    });
   });
 
   // ── Scene selector active state ──

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nocturne — Gothic Study Room</title>
+  <title>Ambient Studies</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -78,33 +78,54 @@
     </nav>
 
 
-    <!-- ── Ambient SFX Toggles (bottom-right) ── -->
+    <!-- ── Ambient SFX Volume Controls (bottom-right) ── -->
     <div id="sfx-area">
       <div id="sfx-list">
-        <div class="sfx-list-header">Ambience</div>
+        <div class="sfx-list-header">Volume</div>
+
         <div class="sfx-item">
-          <span class="sfx-name">Rain</span>
-          <div class="sfx-toggle on" data-sfx="rain"></div>
+          <svg class="sfx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+          </svg>
+          <span class="sfx-name">Music Volume</span>
+          <input type="range" class="sfx-slider" data-sfx="music" min="0" max="100" value="70">
         </div>
+
         <div class="sfx-item">
-          <span class="sfx-name">Thunder</span>
-          <div class="sfx-toggle" data-sfx="thunder"></div>
+          <svg class="sfx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <line x1="4" y1="8" x2="4" y2="16"/><line x1="8" y1="5" x2="8" y2="19"/>
+            <line x1="12" y1="3" x2="12" y2="21"/><line x1="16" y1="7" x2="16" y2="17"/>
+            <line x1="20" y1="10" x2="20" y2="14"/>
+          </svg>
+          <span class="sfx-name">Ambient Volume</span>
+          <input type="range" class="sfx-slider" data-sfx="ambient" min="0" max="100" value="50">
         </div>
+
         <div class="sfx-item">
-          <span class="sfx-name">Fireplace</span>
-          <div class="sfx-toggle on" data-sfx="fireplace"></div>
+          <svg class="sfx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"/>
+            <line x1="8" y1="16" x2="8.01" y2="21"/><line x1="12" y1="13" x2="12.01" y2="18"/>
+            <line x1="16" y1="16" x2="16.01" y2="21"/>
+          </svg>
+          <span class="sfx-name">Weather Volume</span>
+          <input type="range" class="sfx-slider" data-sfx="weather" min="0" max="100" value="40">
         </div>
+
         <div class="sfx-item">
-          <span class="sfx-name">Wind</span>
-          <div class="sfx-toggle" data-sfx="wind"></div>
-        </div>
-        <div class="sfx-item">
-          <span class="sfx-name">Quill &amp; Paper</span>
-          <div class="sfx-toggle" data-sfx="quill"></div>
+          <svg class="sfx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+          <span class="sfx-name">Interface Volume</span>
+          <input type="range" class="sfx-slider" data-sfx="interface" min="0" max="100" value="60">
         </div>
       </div>
-      <button id="btn-sfx-toggle" aria-label="Toggle ambient sounds list" title="Ambient SFX">
-        <!-- Waveform icon -->
+
+      <button id="btn-sfx-toggle" aria-label="Toggle volume controls" title="Volume Controls">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
              stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
           <line x1="4" y1="8" x2="4" y2="16"/>
@@ -228,7 +249,6 @@
               <div class="p-track-title">Midnight Requiem</div>
               <div class="p-track-artist">Placeholder</div>
             </div>
-            <div class="p-track-toggle"></div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">02</span>
@@ -236,7 +256,6 @@
               <div class="p-track-title">Candlelit Reverie</div>
               <div class="p-track-artist">Placeholder</div>
             </div>
-            <div class="p-track-toggle"></div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">03</span>
@@ -244,7 +263,6 @@
               <div class="p-track-title">Rain on Stone</div>
               <div class="p-track-artist">Placeholder</div>
             </div>
-            <div class="p-track-toggle"></div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">04</span>
@@ -252,7 +270,6 @@
               <div class="p-track-title">The Watcher's Lullaby</div>
               <div class="p-track-artist">Placeholder</div>
             </div>
-            <div class="p-track-toggle"></div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">05</span>
@@ -260,7 +277,6 @@
               <div class="p-track-title">Hollow Cathedral</div>
               <div class="p-track-artist">Placeholder</div>
             </div>
-            <div class="p-track-toggle"></div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">06</span>
@@ -268,7 +284,6 @@
               <div class="p-track-title">Veiled Procession</div>
               <div class="p-track-artist">Placeholder</div>
             </div>
-            <div class="p-track-toggle"></div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">07</span>
@@ -276,7 +291,6 @@
               <div class="p-track-title">Obsidian Halls</div>
               <div class="p-track-artist">Placeholder</div>
             </div>
-            <div class="p-track-toggle"></div>
           </div>
           <div class="playlist-track-item">
             <span class="p-track-num">08</span>
@@ -284,7 +298,6 @@
               <div class="p-track-title">Last Ember</div>
               <div class="p-track-artist">Placeholder</div>
             </div>
-            <div class="p-track-toggle"></div>
           </div>
         </div>
       </div>
