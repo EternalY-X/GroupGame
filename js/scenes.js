@@ -1,0 +1,1 @@
+// scenes.js — Scene switching + canvas particle system
