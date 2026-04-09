@@ -141,7 +141,20 @@
     <!-- ── Now-Playing Bar (bottom-centre) ── -->
     <div id="player-bar">
 
-      <!-- Track info (left) -->
+      <!-- Playlist open button (left end) -->
+      <button id="btn-open-playlist" aria-label="Open playlist" title="Playlist">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="8" y1="6" x2="21" y2="6"/>
+          <line x1="8" y1="12" x2="21" y2="12"/>
+          <line x1="8" y1="18" x2="21" y2="18"/>
+          <line x1="3" y1="6" x2="3.01" y2="6"/>
+          <line x1="3" y1="12" x2="3.01" y2="12"/>
+          <line x1="3" y1="18" x2="3.01" y2="18"/>
+        </svg>
+      </button>
+
+      <!-- Track info -->
       <div class="player-track-info">
         <div>
           <div class="track-title">Midnight Requiem</div>
@@ -202,18 +215,6 @@
         <input type="range" id="volume" class="volume-slider" min="0" max="100" value="60">
       </div>
 
-      <!-- Playlist open button (right end) -->
-      <button id="btn-open-playlist" aria-label="Open playlist" title="Playlist">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="2" stroke-linecap="round">
-          <line x1="8" y1="6" x2="21" y2="6"/>
-          <line x1="8" y1="12" x2="21" y2="12"/>
-          <line x1="8" y1="18" x2="21" y2="18"/>
-          <line x1="3" y1="6" x2="3.01" y2="6"/>
-          <line x1="3" y1="12" x2="3.01" y2="12"/>
-          <line x1="3" y1="18" x2="3.01" y2="18"/>
-        </svg>
-      </button>
     </div>
 
 
