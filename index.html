@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nocturne — Gothic Study Room</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       SCENE CONTAINER — Full-screen background
+       3 layers stacked: paintings → CSS fx → particles
+       ========================================== -->
+  <div id="scene-container">
+    <div id="layer-paintings" class="scene-layer" aria-hidden="true">
+      <!-- Matte painting frames go here (crossfaded PNGs) -->
+    </div>
+
+    <div id="layer-css-fx" class="scene-layer" aria-hidden="true">
+      <!-- Vignette, glow pulse, flicker overlays -->
+    </div>
+
+    <div id="layer-particles" class="scene-layer" aria-hidden="true">
+      <!-- Canvas for snow / rain / embers -->
+      <canvas id="particle-canvas"></canvas>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       UI OVERLAY — All interactive elements
+       ========================================== -->
+  <div id="ui-overlay">
+
+    <!-- ── Pomodoro Timer (top-left) ── -->
+    <section id="timer-card" aria-label="Pomodoro timer">
+      <div class="timer-label">Focus Session</div>
+      <div class="timer-display" id="timer-display">25:00</div>
+      <div class="timer-controls">
+        <button class="timer-btn" id="btn-timer-start" aria-label="Start timer">&#9654;</button>
+        <button class="timer-btn" id="btn-timer-pause" aria-label="Pause timer">&#10074;&#10074;</button>
+        <button class="timer-btn" id="btn-timer-reset" aria-label="Reset timer">&#8634;</button>
+      </div>
+    </section>
+
+
+    <!-- ── Playlist Sidebar (right) ── -->
+    <aside id="sidebar" aria-label="Music playlist">
+      <button id="sidebar-toggle" aria-label="Toggle playlist">Music</button>
+
+      <div class="sidebar-header">
+        <h2>Playlist</h2>
+      </div>
+
+      <!-- Now playing -->
+      <div class="now-playing">
+        <div class="track-title">Track Title</div>
+        <div class="track-artist">Artist Name</div>
+        <div class="playback-controls">
+          <button class="skip-btn" id="btn-prev" aria-label="Previous track">&#9664;</button>
+          <button class="play-btn" id="btn-play" aria-label="Play">&#9654;</button>
+          <button class="skip-btn" id="btn-next" aria-label="Next track">&#9654;</button>
+        </div>
+      </div>
+
+      <!-- Volume -->
+      <div class="volume-row">
+        <label for="volume">Vol</label>
+        <input type="range" id="volume" class="volume-slider" min="0" max="100" value="60">
+      </div>
+
+      <!-- Track list -->
+      <div class="track-list">
+        <div class="track-item active">
+          <span class="track-num">01</span>
+          <div class="track-info">
+            <div class="title">Midnight Requiem</div>
+            <div class="artist">Placeholder</div>
+          </div>
+        </div>
+        <div class="track-item">
+          <span class="track-num">02</span>
+          <div class="track-info">
+            <div class="title">Candlelit Reverie</div>
+            <div class="artist">Placeholder</div>
+          </div>
+        </div>
+        <div class="track-item">
+          <span class="track-num">03</span>
+          <div class="track-info">
+            <div class="title">Rain on Stone</div>
+            <div class="artist">Placeholder</div>
+          </div>
+        </div>
+        <div class="track-item">
+          <span class="track-num">04</span>
+          <div class="track-info">
+            <div class="title">The Watcher's Lullaby</div>
+            <div class="artist">Placeholder</div>
+          </div>
+        </div>
+        <div class="track-item">
+          <span class="track-num">05</span>
+          <div class="track-info">
+            <div class="title">Hollow Cathedral</div>
+            <div class="artist">Placeholder</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+
+    <!-- ── Bottom Bar — Scene Selectors ── -->
+    <nav id="bottom-bar" aria-label="Scene selection">
+      <button class="scene-icon active" data-scene="library" aria-label="Haunted Library">
+        <div class="icon-placeholder"></div>
+        <span class="scene-label">Library</span>
+      </button>
+      <button class="scene-icon" data-scene="piano" aria-label="Candlelit Piano Room">
+        <div class="icon-placeholder"></div>
+        <span class="scene-label">Piano Room</span>
+      </button>
+      <button class="scene-icon" data-scene="garden" aria-label="Moonlit Garden">
+        <div class="icon-placeholder"></div>
+        <span class="scene-label">Garden</span>
+      </button>
+    </nav>
+
+  </div><!-- /ui-overlay -->
+
+
+  <!-- ==========================================
+       SCRIPTS — linked but empty for now
+       ========================================== -->
+  <script src="js/scenes.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/timer.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

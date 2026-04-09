@@ -1,0 +1,501 @@
+/* ============================================
+   GOTHIC STUDY APP — Wireframe / Colour-Block Pass
+   ============================================ */
+
+/* --- Imports --- */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+/* --- Design Tokens --- */
+:root {
+  /* Palette */
+  --bg-void:        #0a0a0e;
+  --bg-deep:        #111117;
+  --bg-panel:       #17171f;
+  --bg-card:        #1e1e28;
+  --bg-hover:       #262632;
+  --border-subtle:  #2a2a38;
+  --border-glow:    #3d2e4f;
+
+  --text-primary:   #e8e4df;
+  --text-secondary: #9e96a8;
+  --text-muted:     #6b6478;
+
+  --accent-gold:    #c9a84c;
+  --accent-ember:   #a0522d;
+  --accent-purple:  #6e4a7a;
+  --accent-crimson: #7a2e2e;
+
+  /* Typography */
+  --font-display: 'Cinzel', serif;
+  --font-body:    'Cormorant Garamond', serif;
+
+  /* Layout */
+  --sidebar-width: 300px;
+  --bottom-bar-h:  72px;
+  --timer-size:    180px;
+  --radius:        6px;
+  --transition:    0.35s ease;
+}
+
+/* --- Reset --- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ============================================
+   SCENE CONTAINER  (full-screen background)
+   ============================================ */
+#scene-container {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--bg-deep);
+  /* Crosshatch placeholder so the area is visible */
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 40px,
+      rgba(255,255,255,.015) 40px,
+      rgba(255,255,255,.015) 41px
+    );
+}
+
+/* Layer placeholders — stacked inside scene container */
+.scene-layer {
+  position: absolute;
+  inset: 0;
+}
+
+#layer-paintings {
+  z-index: 1;
+}
+
+#layer-css-fx {
+  z-index: 2;
+  /* Demo vignette */
+  background: radial-gradient(
+    ellipse at center,
+    transparent 50%,
+    rgba(0, 0, 0, 0.55) 100%
+  );
+  pointer-events: none;
+}
+
+#layer-particles {
+  z-index: 3;
+  pointer-events: none;
+}
+
+#layer-particles canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ============================================
+   UI OVERLAY  (sits above all scene layers)
+   ============================================ */
+#ui-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#ui-overlay > * {
+  pointer-events: auto;
+}
+
+/* ============================================
+   POMODORO TIMER  (top-left badge)
+   ============================================ */
+#timer-card {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  width: var(--timer-size);
+  padding: 20px 16px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+
+#timer-card .timer-label {
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+
+#timer-card .timer-display {
+  font-family: var(--font-display);
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.08em;
+}
+
+#timer-card .timer-controls {
+  margin-top: 14px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.timer-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-panel);
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+  display: grid;
+  place-items: center;
+}
+
+.timer-btn:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+/* ============================================
+   PLAYLIST SIDEBAR  (right edge, toggle)
+   ============================================ */
+#sidebar {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--sidebar-width);
+  height: 100%;
+  background: var(--bg-panel);
+  border-left: 1px solid var(--border-subtle);
+  transform: translateX(0);
+  transition: transform var(--transition);
+  display: flex;
+  flex-direction: column;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
+}
+
+#sidebar.collapsed {
+  transform: translateX(100%);
+}
+
+#sidebar-toggle {
+  position: absolute;
+  top: 50%;
+  left: -40px;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 72px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-right: none;
+  border-radius: var(--radius) 0 0 var(--radius);
+  color: var(--text-secondary);
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background var(--transition), color var(--transition);
+  writing-mode: vertical-rl;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+#sidebar-toggle:hover {
+  background: var(--bg-hover);
+  color: var(--accent-gold);
+}
+
+.sidebar-header {
+  padding: 24px 20px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.sidebar-header h2 {
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+}
+
+/* Now-playing area */
+.now-playing {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.now-playing .track-title {
+  font-family: var(--font-display);
+  font-size: 0.9rem;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.now-playing .track-artist {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.playback-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.play-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--accent-gold);
+  background: transparent;
+  color: var(--accent-gold);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.play-btn:hover {
+  background: rgba(201, 168, 76, 0.12);
+}
+
+.skip-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: color var(--transition);
+}
+
+.skip-btn:hover {
+  color: var(--text-primary);
+}
+
+/* Volume */
+.volume-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 20px;
+  margin-top: 12px;
+}
+
+.volume-row label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  flex: 1;
+  height: 3px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+  outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent-gold);
+  cursor: pointer;
+}
+
+/* Playlist track list */
+.track-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 0;
+}
+
+.track-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.track-item:hover {
+  background: var(--bg-hover);
+}
+
+.track-item.active {
+  background: var(--bg-card);
+  border-left: 2px solid var(--accent-gold);
+}
+
+.track-item .track-num {
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  min-width: 18px;
+}
+
+.track-item .track-info .title {
+  font-size: 0.85rem;
+  color: var(--text-primary);
+}
+
+.track-item .track-info .artist {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Scrollbar */
+.track-list::-webkit-scrollbar {
+  width: 4px;
+}
+.track-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+.track-list::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 2px;
+}
+
+/* ============================================
+   BOTTOM BAR  (scene selectors)
+   ============================================ */
+#bottom-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: var(--bottom-bar-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  background: linear-gradient(
+    to top,
+    rgba(10, 10, 14, 0.92) 0%,
+    rgba(10, 10, 14, 0.6) 70%,
+    transparent 100%
+  );
+  padding-bottom: 6px;
+}
+
+.scene-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: border-color var(--transition), transform var(--transition), box-shadow var(--transition);
+  display: grid;
+  place-items: center;
+  position: relative;
+}
+
+.scene-icon:hover {
+  border-color: var(--accent-gold);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.15);
+}
+
+.scene-icon.active {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(201, 168, 76, 0.2);
+}
+
+.scene-icon .icon-placeholder {
+  width: 22px;
+  height: 22px;
+  border-radius: 3px;
+  background: var(--border-subtle);
+}
+
+.scene-icon.active .icon-placeholder {
+  background: var(--accent-gold);
+}
+
+/* Scene label tooltip */
+.scene-icon .scene-label {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  font-family: var(--font-display);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  background: var(--bg-card);
+  padding: 4px 10px;
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--transition);
+}
+
+.scene-icon:hover .scene-label {
+  opacity: 1;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 640px) {
+  :root {
+    --sidebar-width: 260px;
+    --timer-size: 140px;
+    --bottom-bar-h: 64px;
+  }
+
+  #timer-card {
+    top: 12px;
+    left: 12px;
+    padding: 14px 12px;
+  }
+
+  #timer-card .timer-display {
+    font-size: 1.4rem;
+  }
+
+  .scene-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
