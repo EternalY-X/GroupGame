@@ -30,20 +30,20 @@
             [145, 160, 155],
             [190, 195, 192],
           ],
-          widthMin: 0.4,
-          widthMax: 1.0,
-          driftSpeed: 1.6,
+          widthMin: 1,
+          widthMax: 1.9,
+          driftSpeed: 4,
         },
         grain: {
-          count: 400,
+          count: 900,
           opacity: 0.7,
           color: [160, 170, 165],
-          colorVariance: 25,
-          sizeMin: 0.5,
-          sizeMax: 1.7,
+          colorVariance: 40,
+          sizeMin: 0.1,
+          sizeMax: 2.2,
           driftSpeed: 0.2,
           jitter: 0.1,
-          turnRate: 0.002,
+          turnRate: 0.02,
         },
       },
     },
@@ -141,6 +141,8 @@
   }
 
   // Ping-pong: 0→1→2→1→0→1→2...
+  // Forward: fade next frame IN on top of current (current stays visible underneath)
+  // Backward: next frame is BELOW current, so fade current OUT to reveal it
   function scheduleNext() {
     if (!isCycleRunning || !currentScene) return;
     var timings = currentScene.timing;
@@ -153,16 +155,38 @@
       if (currentFrame <= 0) frameDirection = 1;
       var nextFrame = currentFrame + frameDirection;
 
-      frameEls[nextFrame].style.transitionDuration = timing.fade + 'ms';
-      frameEls[nextFrame].style.opacity = '1';
+      if (frameDirection === 1) {
+        // Going forward: next frame is above current in DOM → fade it in
+        frameEls[nextFrame].style.transitionDuration = timing.fade + 'ms';
+        frameEls[nextFrame].style.opacity = '1';
 
-      setTimeout(function () {
-        frameEls[currentFrame].style.transitionDuration = '0ms';
-        frameEls[currentFrame].style.opacity = '0';
-        currentFrame = nextFrame;
-        pingPongStep++;
-        scheduleNext();
-      }, timing.fade);
+        setTimeout(function () {
+          frameEls[currentFrame].style.transitionDuration = '0ms';
+          frameEls[currentFrame].style.opacity = '0';
+          currentFrame = nextFrame;
+          pingPongStep++;
+          scheduleNext();
+        }, timing.fade);
+
+      } else {
+        // Going backward: next frame is below current in DOM
+        // First make sure the frame beneath is visible
+        frameEls[nextFrame].style.transitionDuration = '0ms';
+        frameEls[nextFrame].style.opacity = '1';
+
+        // Then fade the current (top) frame out to reveal it
+        // Small delay so the browser registers the 0ms change first
+        requestAnimationFrame(function () {
+          frameEls[currentFrame].style.transitionDuration = timing.fade + 'ms';
+          frameEls[currentFrame].style.opacity = '0';
+
+          setTimeout(function () {
+            currentFrame = nextFrame;
+            pingPongStep++;
+            scheduleNext();
+          }, timing.fade);
+        });
+      }
     }, timing.hold);
   }
 

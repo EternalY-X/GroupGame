@@ -78,8 +78,9 @@ button { font-family: inherit; }
   object-fit: cover;
   object-position: center;
   opacity: 0;
-  /* Default duration overridden per-step by scenes.js */
-  transition: opacity 3s ease-in-out;
+  /* transition duration set entirely by scenes.js */
+  transition-property: opacity;
+  transition-timing-function: ease-in-out;
   /* Prevent flicker on compositing */
   will-change: opacity;
   backface-visibility: hidden;
@@ -345,7 +346,7 @@ button { font-family: inherit; }
   border: 1px solid var(--border-subtle);
   border-radius: 28px;
   display: flex; align-items: center;
-  padding: 0 18px 0 8px;
+  padding: 0 8px 0 18px;
   gap: 12px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.6);
 }
@@ -574,77 +575,26 @@ button { font-family: inherit; }
 /* ============================================
    RESPONSIVE
    ============================================ */
-
-/* Tablet */
 @media (max-width: 768px) {
   :root {
-    --player-w: 420px;
+    --player-w: 400px;
     --timer-size: 150px;
   }
   #playlist-popup { width: 480px; }
   .playlist-covers { width: 140px; }
-  #scene-selectors { bottom: 80px; left: 16px; }
-  #sfx-area { bottom: 80px; right: 16px; }
 }
 
-/* Large phone */
-@media (max-width: 600px) {
+@media (max-width: 540px) {
   :root {
-    --player-w: calc(100vw - 32px);
+    --player-w: calc(100vw - 40px);
     --timer-size: 130px;
   }
-
-  #timer-card {
-    top: 12px; left: 12px;
-    padding: 14px 12px;
-  }
-  #timer-card .timer-label { font-size: 0.55rem; }
+  #timer-card { top: 12px; left: 12px; padding: 14px 12px; }
   #timer-card .timer-display { font-size: 1.4rem; }
-
-  #scene-selectors {
-    bottom: 74px; left: 50%;
-    transform: translateX(-50%);
-  }
-  .scene-icon { width: 40px; height: 40px; }
-
-  #sfx-area { bottom: 74px; right: 12px; }
-  #sfx-list { width: 200px; }
-  .sfx-item .sfx-name { font-size: 0.7rem; }
-
-  #player-bar {
-    border-radius: 16px;
-    height: 50px;
-    gap: 8px;
-    padding: 0 12px 0 6px;
-  }
-  .player-track-info .track-title { max-width: 90px; font-size: 0.65rem; }
-  .player-track-info .track-artist { display: none; }
-  .player-controls { gap: 2px; }
-  .ctrl-btn { width: 26px; height: 26px; }
-  .ctrl-btn.play-btn { width: 32px; height: 32px; }
-  .volume-slider { width: 50px; }
-
   #playlist-popup {
-    width: calc(100vw - 24px);
-    max-height: 50vh;
-    bottom: calc(12px + 50px + 10px);
+    width: calc(100vw - 32px);
+    max-height: 360px;
   }
-  .playlist-covers { width: 100px; padding: 10px 8px; gap: 8px; }
-  .playlist-cover-item .cover-label { font-size: 0.5rem; }
-  .playlist-tracks-header { padding: 12px 14px 10px; }
-  .playlist-track-item { padding: 7px 14px; gap: 8px; }
-  .playlist-track-item .p-track-title { font-size: 0.75rem; }
-
-  #btn-hide-ui { top: 12px; right: 12px; width: 36px; height: 36px; }
-}
-
-/* Small phone */
-@media (max-width: 380px) {
-  :root { --timer-size: 110px; }
-  #timer-card .timer-display { font-size: 1.2rem; }
-  .timer-btn { width: 28px; height: 28px; font-size: 0.65rem; }
-  .player-volume { display: none; }
-  #btn-shuffle, #btn-repeat { display: none; }
-  .playlist-covers { display: none; }
-  #playlist-popup { flex-direction: column; }
+  .playlist-covers { width: 110px; }
+  .scene-icon { width: 38px; height: 38px; }
 }
