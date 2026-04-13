@@ -10,9 +10,9 @@
   const SCENES = {
     dollhouse: {
       frames: [
-        'assets/scenes/dolls-1.jpg',
-        'assets/scenes/dolls-2.jpg',
-        'assets/scenes/dolls-3.jpg',
+        'assets/scenes/dollhouse/dolls-1.jpg',
+        'assets/scenes/dollhouse/dolls-2.jpg',
+        'assets/scenes/dollhouse/dolls-3.jpg',
       ],
       timing: [
         { fade: 3000, hold: 5000 },
@@ -50,17 +50,29 @@
 
     garden: {
       frames: [
-        'assets/scenes/garden-1.png',
-        'assets/scenes/garden-2.png',
-        'assets/scenes/garden-3.png',
+        'assets/scenes/fairy-garden/1.jpg',
+        'assets/scenes/fairy-garden/2.jpg',
+        'assets/scenes/fairy-garden/3.jpg',
       ],
       timing: [
         { fade: 3200, hold: 5000 },
         { fade: 2200, hold: 4000 },
         { fade: 4200, hold: 7000 },
       ],
-      // TODO: fireflies + fog
-      particles: { threads: null, grain: null },
+      particles: {
+        threads: null,
+        grain: {
+          count: 15,
+          opacity: 0.09,
+          color: [190, 195, 185],
+          colorVariance: 50,
+          sizeMin: 200,
+          sizeMax: 300,
+          driftSpeed: 0.2,
+          jitter: 0.1,
+          turnRate: 0.001,
+        },
+      },
     },
 
     ballroom: {
