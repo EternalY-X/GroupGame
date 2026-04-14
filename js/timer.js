@@ -1,6 +1,6 @@
 // timer.js — Pomodoro timer
 
-let timeLeft = 0.5 * 60;
+let timeLeft = 25 * 60;
 let timer;
 
 
@@ -35,3 +35,18 @@ function startTimer()
 
   timer = setInterval(countdown, 1000)
 }
+
+function pauseTimer()
+{
+    clearInterval(timer);
+    timer = null;
+}
+
+function resetTimer()
+{
+    clearInterval(timer);
+    timer = null;
+    timeLeft = 25 * 60;
+    displayTime();
+}
+
