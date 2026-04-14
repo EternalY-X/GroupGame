@@ -13,3 +13,9 @@ var names =
     Garden: [],
     Ballroom: []
 };
+
+var currentPlaylist = "DollHouse";
+var currentSong = 0;
+var music = new Audio(playlists[currentPlaylist][currentSong]);
+var ambient = new Audio("") // need ambient audio
+ambient.loop = true
