@@ -71,6 +71,20 @@
           driftSpeed: 0.2,
           jitter: 0.1,
           turnRate: 0.001,
+          blur: 40,
+          yMin: 0.65,        // fog only in bottom 35% of screen
+          yMax: 1.0,
+        },
+         rain: {
+          count: 300,
+          opacity: 0.25,
+          color: [180, 190, 185],
+          colorVariance: 10,
+          length: 18,         // raindrop streak length in px
+          speed: 7,           // fall speed
+          speedVariance: 7,
+          angle: 0.15,        // slight wind angle in radians (tilts right)
+          width: 0.8,
         },
       },
     },
@@ -213,6 +227,7 @@
   var animRunning = false;
   var threads = [];
   var grains = [];
+  var raindrops = [];
 
   function resizeCanvas() {
     var dpr = window.devicePixelRatio || 1;
@@ -300,8 +315,12 @@
 
   function GrainDot(cfg) {
     this.cfg = cfg;
+    var yMin = (cfg.yMin || 0) * H;
+    var yMax = (cfg.yMax || 1) * H;
     this.x = Math.random() * W;
-    this.y = Math.random() * H;
+    this.y = yMin + Math.random() * (yMax - yMin);
+    this.yMin = yMin;
+    this.yMax = yMax;
     this.size = cfg.sizeMin + Math.random() * (cfg.sizeMax - cfg.sizeMin);
 
     this.angle = Math.random() * Math.PI * 2;
@@ -334,8 +353,14 @@
     var pad = 20;
     if (this.x < -pad) this.x = W + pad;
     if (this.x > W + pad) this.x = -pad;
-    if (this.y < -pad) this.y = H + pad;
-    if (this.y > H + pad) this.y = -pad;
+    if (this.cfg.yMin !== undefined) {
+      // Constrained to a vertical band — wrap within it
+      if (this.y < this.yMin - pad) this.y = this.yMax + pad;
+      if (this.y > this.yMax + pad) this.y = this.yMin - pad;
+    } else {
+      if (this.y < -pad) this.y = H + pad;
+      if (this.y > H + pad) this.y = -pad;
+    }
 
     this.pulsePhase += this.pulseSpeed;
   };
@@ -345,10 +370,64 @@
     var alpha = this.cfg.opacity * this.opacityMul * pulse;
     if (alpha < 0.005) return;
 
+    if (this.cfg.blur) {
+      ctx.save();
+      ctx.filter = 'blur(' + this.cfg.blur + 'px)';
+    }
     ctx.fillStyle = 'rgba(' + this.colorStr + ',' + alpha + ')';
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
     ctx.fill();
+    if (this.cfg.blur) {
+      ctx.restore();
+    }
+  };
+
+  // ── Rain streak ──
+
+  function RainDrop(cfg) {
+    this.cfg = cfg;
+    this.reset(true);
+  }
+
+  RainDrop.prototype.reset = function (initial) {
+    var c = this.cfg;
+    this.x = Math.random() * W;
+    this.y = initial ? Math.random() * H : -20;
+    this.speed = c.speed + (Math.random() - 0.5) * c.speedVariance;
+    this.length = c.length * (0.7 + Math.random() * 0.6);
+    this.opacity = c.opacity * (0.4 + Math.random() * 0.6);
+    this.width = c.width * (0.6 + Math.random() * 0.8);
+
+    var base = c.color;
+    var v = c.colorVariance;
+    var r = Math.round(base[0] + (Math.random() - 0.5) * v);
+    var g = Math.round(base[1] + (Math.random() - 0.5) * v);
+    var b = Math.round(base[2] + (Math.random() - 0.5) * v);
+    this.colorStr = r + ',' + g + ',' + b;
+  };
+
+  RainDrop.prototype.update = function () {
+    var c = this.cfg;
+    this.x += Math.sin(c.angle) * this.speed;
+    this.y += Math.cos(c.angle) * this.speed;
+
+    if (this.y > H + 20) this.reset(false);
+    if (this.x > W + 20) this.x = -20;
+    if (this.x < -20) this.x = W + 20;
+  };
+
+  RainDrop.prototype.draw = function () {
+    var c = this.cfg;
+    var dx = Math.sin(c.angle) * this.length;
+    var dy = Math.cos(c.angle) * this.length;
+
+    ctx.beginPath();
+    ctx.moveTo(this.x, this.y);
+    ctx.lineTo(this.x + dx, this.y + dy);
+    ctx.strokeStyle = 'rgba(' + this.colorStr + ',' + this.opacity + ')';
+    ctx.lineWidth = this.width;
+    ctx.stroke();
   };
 
 
@@ -357,6 +436,7 @@
   function loadParticles(pcfg) {
     threads = [];
     grains = [];
+    raindrops = [];
     if (!pcfg) return;
 
     if (pcfg.threads) {
@@ -367,6 +447,12 @@
     if (pcfg.grain) {
       for (var j = 0; j < pcfg.grain.count; j++) {
         grains.push(new GrainDot(pcfg.grain));
+      }
+    }
+
+    if (pcfg.rain) {
+      for (var k = 0; k < pcfg.rain.count; k++) {
+        raindrops.push(new RainDrop(pcfg.rain));
       }
     }
 
@@ -382,6 +468,7 @@
 
     for (var i = 0; i < threads.length; i++) { threads[i].update(); threads[i].draw(); }
     for (var j = 0; j < grains.length; j++) { grains[j].update(); grains[j].draw(); }
+    for (var k = 0; k < raindrops.length; k++) { raindrops[k].update(); raindrops[k].draw(); }
 
     requestAnimationFrame(animLoop);
   }
