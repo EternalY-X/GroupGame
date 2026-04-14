@@ -2,6 +2,7 @@
 
 let timeLeft = 25 * 60;
 let timer;
+let timerDone = new Audio("TimerEndsAudio"); //Needs to be added
 
 
 // display time in MM/SS
@@ -25,7 +26,7 @@ function countdown()
     {
     clearInterval(timer);
     timer = null;
-    alert("Time's up!"); // UP FOR CHANGE
+    timerDone.play();
     }
 }
 
