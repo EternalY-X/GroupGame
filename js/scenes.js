@@ -91,17 +91,32 @@
 
     ballroom: {
       frames: [
-        'assets/scenes/ballroom-1.png',
-        'assets/scenes/ballroom-2.png',
-        'assets/scenes/ballroom-3.png',
+        'assets/scenes/ballroom/1.jpg',
+        'assets/scenes/ballroom/2.jpg',
+        'assets/scenes/ballroom/3.jpg',
       ],
       timing: [
         { fade: 3500, hold: 5500 },
         { fade: 2000, hold: 3500 },
         { fade: 4500, hold: 6500 },
       ],
-      // TODO: embers / candles
-      particles: { threads: null, grain: null },
+
+      particles: {
+        threads: null,
+        grain: null,
+        embers: {
+          count: 250,
+          opacity: 0.7,
+          color: [184, 133, 120],
+          colorVariance: 50,
+          sizeMin: 0.3,
+          sizeMax: 6,
+          riseSpeed: 0.7,
+          riseVariance: 0.7,
+          drift: 0.3,
+          fadeHeight: 0.8,
+        },
+      },
     },
   };
 
@@ -153,6 +168,11 @@
     setTimeout(function () { if (!isCycleRunning) startCycle(); }, 300);
 
     loadParticles(scene.particles);
+
+    // Toggle ballroom candle glow CSS
+    var fxLayer = document.getElementById('layer-css-fx');
+    fxLayer.className = 'scene-layer';
+    if (sceneKey === 'ballroom') fxLayer.classList.add('scene-ballroom');
   }
 
   function startCycle() {
@@ -202,15 +222,16 @@
 
         // Then fade the current (top) frame out to reveal it
         // Small delay so the browser registers the 0ms change first
+        requestAnimationFrame(function () { //The double requestAnimationFrame ensures one full paint cycle completes before the fade-out starts.
         requestAnimationFrame(function () {
           frameEls[currentFrame].style.transitionDuration = timing.fade + 'ms';
-          frameEls[currentFrame].style.opacity = '0';
 
           setTimeout(function () {
             currentFrame = nextFrame;
             pingPongStep++;
             scheduleNext();
           }, timing.fade);
+        });
         });
       }
     }, timing.hold);
@@ -228,6 +249,7 @@
   var threads = [];
   var grains = [];
   var raindrops = [];
+  var embers = [];
 
   function resizeCanvas() {
     var dpr = window.devicePixelRatio || 1;
@@ -430,6 +452,56 @@
     ctx.stroke();
   };
 
+  // ── Rising ember (ballroom candles) ──
+
+  function Ember(cfg) {
+    this.cfg = cfg;
+    this.reset(true);
+  }
+
+  Ember.prototype.reset = function (initial) {
+    var c = this.cfg;
+    this.x = Math.random() * W;
+    this.y = initial ? Math.random() * H : H + 10;
+    this.size = c.sizeMin + Math.random() * (c.sizeMax - c.sizeMin);
+    this.speed = c.riseSpeed + (Math.random() - 0.5) * c.riseVariance;
+    this.driftX = (Math.random() - 0.5) * c.drift;
+    this.wobblePhase = Math.random() * Math.PI * 2;
+    this.wobbleSpeed = 0.02 + Math.random() * 0.03;
+    this.startY = this.y;
+
+    var base = c.color;
+    var v = c.colorVariance;
+    var r = Math.round(base[0] + (Math.random() - 0.5) * v);
+    var g = Math.round(base[1] + (Math.random() - 0.5) * v);
+    var b = Math.round(base[2] + (Math.random() - 0.5) * v);
+    this.colorStr = r + ',' + g + ',' + b;
+    this.opacityMul = 0.4 + Math.random() * 0.6;
+  };
+
+  Ember.prototype.update = function () {
+    this.y -= this.speed;
+    this.x += this.driftX + Math.sin(this.wobblePhase) * 0.3;
+    this.wobblePhase += this.wobbleSpeed;
+
+    if (this.y < -20) this.reset(false);
+    if (this.x < -20) this.x = W + 20;
+    if (this.x > W + 20) this.x = -20;
+  };
+
+  Ember.prototype.draw = function () {
+    var c = this.cfg;
+    // Fade out as ember rises — gone by fadeHeight fraction of screen
+    var traveled = (this.startY - this.y) / H;
+    var fade = 1 - Math.min(traveled / c.fadeHeight, 1);
+    var alpha = c.opacity * this.opacityMul * fade * fade;
+    if (alpha < 0.005) return;
+
+    ctx.fillStyle = 'rgba(' + this.colorStr + ',' + alpha + ')';
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+    ctx.fill();
+  };
 
   // ── Particle lifecycle ──
 
@@ -437,6 +509,8 @@
     threads = [];
     grains = [];
     raindrops = [];
+    embers = [];
+
     if (!pcfg) return;
 
     if (pcfg.threads) {
@@ -456,6 +530,12 @@
       }
     }
 
+    if (pcfg.embers) {
+      for (var m = 0; m < pcfg.embers.count; m++) {
+        embers.push(new Ember(pcfg.embers));
+      }
+    }
+
     if (!animRunning) {
       animRunning = true;
       requestAnimationFrame(animLoop);
@@ -469,6 +549,7 @@
     for (var i = 0; i < threads.length; i++) { threads[i].update(); threads[i].draw(); }
     for (var j = 0; j < grains.length; j++) { grains[j].update(); grains[j].draw(); }
     for (var k = 0; k < raindrops.length; k++) { raindrops[k].update(); raindrops[k].draw(); }
+    for (var m = 0; m < embers.length; m++) { embers[m].update(); embers[m].draw(); }
 
     requestAnimationFrame(animLoop);
   }

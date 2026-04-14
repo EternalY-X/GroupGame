@@ -571,6 +571,25 @@ button { font-family: inherit; }
 .playlist-track-list::-webkit-scrollbar-thumb {
   background: var(--border-subtle); border-radius: 2px;
 }
+/* ============================================
+   CANDLE GLOW — Ballroom scene
+   Warm pulsing overlay, activated by JS adding
+   .scene-ballroom to #layer-css-fx
+   ============================================ */
+#layer-css-fx.scene-ballroom {
+  background:
+    radial-gradient(ellipse at 50% 25%, rgba(180, 120, 50, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.6) 100%);
+  animation: candleGlow 3s ease-in-out infinite;
+}
+
+@keyframes candleGlow {
+  0%, 100% { opacity: 0.8; }
+  30%      { opacity: 1; }
+  50%      { opacity: 0.6; }
+  70%      { opacity: 0.9; }
+  85%      { opacity: 0.7; }
+}
 
 /* ============================================
    RESPONSIVE
