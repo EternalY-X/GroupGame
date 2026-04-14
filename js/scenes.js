@@ -214,25 +214,20 @@
           scheduleNext();
         }, timing.fade);
 
-      } else {
-        // Going backward: next frame is below current in DOM
-        // First make sure the frame beneath is visible
+     } else {
         frameEls[nextFrame].style.transitionDuration = '0ms';
         frameEls[nextFrame].style.opacity = '1';
+        // Force reflow so the browser paints the 0ms change before starting the fade
+        void frameEls[nextFrame].offsetHeight;
 
-        // Then fade the current (top) frame out to reveal it
-        // Small delay so the browser registers the 0ms change first
-        requestAnimationFrame(function () { //The double requestAnimationFrame ensures one full paint cycle completes before the fade-out starts.
-        requestAnimationFrame(function () {
-          frameEls[currentFrame].style.transitionDuration = timing.fade + 'ms';
+        frameEls[currentFrame].style.transitionDuration = timing.fade + 'ms';
+        frameEls[currentFrame].style.opacity = '0';
 
-          setTimeout(function () {
-            currentFrame = nextFrame;
-            pingPongStep++;
-            scheduleNext();
-          }, timing.fade);
-        });
-        });
+        setTimeout(function () {
+          currentFrame = nextFrame;
+          pingPongStep++;
+          scheduleNext();
+        }, timing.fade);
       }
     }, timing.hold);
   }
