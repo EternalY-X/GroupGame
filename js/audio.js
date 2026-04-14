@@ -1,13 +1,13 @@
 // audio.js — Playlist logic
 
-var playlists = 
+var playlists =
 {
     DollHouse: ["assets/audio/doll-house/1-requiem-lacrimosa-mozart.mp3", "assets/audio/doll-house/2-lullaby-brahms.mp3", "assets/audio/doll-house/3-badinerie-bach.mp3", "assets/audio/doll-house/4-beethoven-for-elise.mp3"],
     Garden: [],
     Ballroom: []
 }; // need more songs
 
-var names = 
+var names =
 {
     DollHouse: ["ph1", "ph2", "ph3", "ph4"],
     Garden: [],
@@ -40,7 +40,7 @@ function togglePlay()
     {
         music.pause();
         isPlaying = false
-        icon.innerHTML = 
+        icon.innerHTML =
         `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
         <polygon points="6 3 20 12 6 21"/>
         </svg>`;
