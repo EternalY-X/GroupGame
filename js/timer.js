@@ -52,3 +52,4 @@ function resetTimer()
 }
 
 displayTime();
+// timer.js — Pomodoro timer (Olver's module)
