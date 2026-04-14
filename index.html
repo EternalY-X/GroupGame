@@ -178,10 +178,12 @@
             <polygon points="22 4 8 12 22 20"/>
           </svg>
         </button>
-        <button class="ctrl-btn play-btn" id="btn-play" aria-label="Play">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-            <polygon points="6 3 20 12 6 21"/>
-          </svg>
+        <button onclick="togglePlay()" class="ctrl-btn play-btn" id="btn-play" aria-label="Play">
+          <span id="toggle-play-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="6 3 20 12 6 21"/>
+            </svg>
+          </span>
         </button>
         <button class="ctrl-btn" id="btn-next" aria-label="Next track">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">

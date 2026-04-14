@@ -24,17 +24,17 @@ function countdown()
     
     else 
     {
-    clearInterval(timer);
-    timer = null;
-    timerDone.play();
+        clearInterval(timer);
+        timer = null;
+        timerDone.play();
     }
 }
 
 function startTimer() 
 {
-  if (timer) return;
+    if(timer) return;
 
-  timer = setInterval(countdown, 1000)
+    timer = setInterval(countdown, 1000)
 }
 
 function pauseTimer()
@@ -51,3 +51,4 @@ function resetTimer()
     displayTime();
 }
 
+displayTime();
