@@ -121,51 +121,63 @@
   };
 
 
-  // ════════════════════════════════════════════
-  //  CROSSFADE SYSTEM
+ // ════════════════════════════════════════════
+  //  CROSSFADE SYSTEM — Simple forward loop
+  //  Uses only TWO img elements that swap roles.
+  //  "show" is the visible frame, "next" fades in
+  //  on top, then becomes "show". No stacking issues.
   // ════════════════════════════════════════════
 
   let currentSceneKey = null;
   let currentScene = null;
-  let frameEls = [];
   let currentFrame = 0;
-  let frameDirection = 1;
-  let pingPongStep = 0;
   let cycleTimer = null;
   let isCycleRunning = false;
 
   const paintingsLayer = document.getElementById('layer-paintings');
 
+  // Only TWO img elements ever — they alternate roles
+  let imgA = null;
+  let imgB = null;
+  let showingA = true;  // which one is currently visible
+
   function createFrameElements() {
     paintingsLayer.innerHTML = '';
-    frameEls = [];
-    for (let i = 0; i < 3; i++) {
-      const img = document.createElement('img');
+
+    imgA = document.createElement('img');
+    imgB = document.createElement('img');
+
+    [imgA, imgB].forEach(function (img) {
       img.classList.add('scene-frame');
       img.alt = '';
       img.draggable = false;
-      img.style.opacity = i === 0 ? '1' : '0';
+      img.style.opacity = '0';
       paintingsLayer.appendChild(img);
-      frameEls.push(img);
-    }
+    });
+
+    // A starts visible
+    imgA.style.opacity = '1';
+    showingA = true;
   }
 
   function loadScene(sceneKey) {
-    const scene = SCENES[sceneKey];
+    var scene = SCENES[sceneKey];
     if (!scene) return;
 
     stopCycle();
     currentSceneKey = sceneKey;
     currentScene = scene;
     currentFrame = 0;
-    frameDirection = 1;
-    pingPongStep = 0;
 
     createFrameElements();
-    scene.frames.forEach(function (src, i) { frameEls[i].src = src; });
 
-    frameEls[0].onload = function () { startCycle(); };
-    setTimeout(function () { if (!isCycleRunning) startCycle(); }, 300);
+    // Load first frame into A (the visible one)
+    imgA.src = scene.frames[0];
+    imgA.onload = function () {
+    imgA.onload = null;  // one-shot — don't fire again on future src changes
+    startCycle();
+  };
+  setTimeout(function () { if (!isCycleRunning) startCycle(); }, 500);
 
     loadParticles(scene.particles);
 
@@ -186,52 +198,54 @@
     if (cycleTimer) { clearTimeout(cycleTimer); cycleTimer = null; }
   }
 
-  // Ping-pong: 0→1→2→1→0→1→2...
-  // Forward: fade next frame IN on top of current (current stays visible underneath)
-  // Backward: next frame is BELOW current, so fade current OUT to reveal it
+// Forward loop: 0 → 1 → 2 → 0 → 1 → 2...
+  // Uses the two img elements (imgA, imgB) that swap roles.
+  // Every timeout stored in cycleTimer — stopCycle() cancels it.
   function scheduleNext() {
     if (!isCycleRunning || !currentScene) return;
-    var timings = currentScene.timing;
-    var timing = timings[pingPongStep % timings.length];
+    var timing = currentScene.timing[currentFrame % currentScene.timing.length];
+    var totalFrames = currentScene.frames.length;
+    var nextFrame = (currentFrame + 1) % totalFrames;
 
+    // Phase 1: hold on current frame
     cycleTimer = setTimeout(function () {
       if (!isCycleRunning) return;
 
-      if (currentFrame >= 2) frameDirection = -1;
-      if (currentFrame <= 0) frameDirection = 1;
-      var nextFrame = currentFrame + frameDirection;
+      var show = showingA ? imgA : imgB;  // currently visible
+      var next = showingA ? imgB : imgA;  // will become visible
 
-      if (frameDirection === 1) {
-        // Going forward: next frame is above current in DOM → fade it in
-        frameEls[nextFrame].style.transitionDuration = timing.fade + 'ms';
-        frameEls[nextFrame].style.opacity = '1';
+      // Load next frame into the hidden img
+      next.src = currentScene.frames[nextFrame];
 
-        setTimeout(function () {
-          frameEls[currentFrame].style.transitionDuration = '0ms';
-          frameEls[currentFrame].style.opacity = '0';
+      var doFade = function () {
+        // Show "next" instantly underneath, then fade "show" out
+        next.style.transitionDuration = '0ms';
+        next.style.opacity = '1';
+        void next.offsetHeight;  // force paint
+
+        show.style.transitionDuration = timing.fade + 'ms';
+        show.style.opacity = '0';
+
+        // Phase 2: wait for fade to finish, then loop
+        // Same cycleTimer — stopCycle still cancels this
+        cycleTimer = setTimeout(function () {
+          if (!isCycleRunning) return;
           currentFrame = nextFrame;
-          pingPongStep++;
+          showingA = !showingA;
           scheduleNext();
         }, timing.fade);
+      };
 
-     } else {
-        frameEls[nextFrame].style.transitionDuration = '0ms';
-        frameEls[nextFrame].style.opacity = '1';
-        // Force reflow so the browser paints the 0ms change before starting the fade
-        void frameEls[nextFrame].offsetHeight;
-
-        frameEls[currentFrame].style.transitionDuration = timing.fade + 'ms';
-        frameEls[currentFrame].style.opacity = '0';
-
-        setTimeout(function () {
-          currentFrame = nextFrame;
-          pingPongStep++;
-          scheduleNext();
-        }, timing.fade);
-      }
+      if (next.complete && next.naturalWidth > 0) {
+  doFade();
+} else {
+  next.onload = function () {
+    next.onload = null;
+    doFade();
+  };
+}
     }, timing.hold);
   }
-
 
   // ════════════════════════════════════════════
   //  PARTICLE ENGINE
