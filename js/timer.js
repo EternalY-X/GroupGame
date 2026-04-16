@@ -16,13 +16,13 @@ function displayTime()
 
 function countdown()
 {
-    if (timeLeft > 0) 
+    if (timeLeft > 0)
     {
         timeLeft--;
         displayTime();
-    } 
-    
-    else 
+    }
+
+    else
     {
         clearInterval(timer);
         timer = null;
@@ -30,7 +30,7 @@ function countdown()
     }
 }
 
-function startTimer() 
+function startTimer()
 {
     if(timer) return;
 
