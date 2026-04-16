@@ -21,6 +21,13 @@ var artists =
     Ballroom: ["Satie", "Bach", "Vivaldi", "Bach", "Beethoven"]
 }
 
+var playlistSubtitles =
+{
+    DollHouse: "Musicbox · haunted",
+    Garden: "placeholder 1",
+    Ballroom: " placeholder 2"
+};
+
 var currentPlaylist = "DollHouse";
 var currentSong = 0;
 var music = new Audio(playlists[currentPlaylist][currentSong]);
@@ -180,6 +187,7 @@ function changePlaylist(chosenPlaylist)
 
     displaySong();
     selectedSong();
+    updateTrackList();
 }
 
 function changeSong(chosenSong)
@@ -281,5 +289,42 @@ document.querySelectorAll('.sfx-item').forEach(function (item) {
   });
 });
 
+function updateTrackList()
+{
+    var trackList = document.getElementsByClassName("playlist-track-list")[0];
+    
+    document.getElementsByClassName("playlist-subtitle")[0].textContent =
+    playlistSubtitles[currentPlaylist];
+
+    trackList.innerHTML = "";
+
+    var titles = songs[currentPlaylist];
+    var currentArtists = artists[currentPlaylist];
+
+    for (var i = 0; i < titles.length; i++)
+    {
+        var item = document.createElement("div");
+        item.className = "playlist-track-item";
+
+        item.onclick = (function(index)
+        {
+            return function()
+            {
+                changeSong(index);
+            };
+        })(i);
+
+        item.innerHTML =
+        '<span class="p-track-num">' + (i + 1).toString().padStart(2, '0') + '</span>' +
+        '<div>' +
+            '<div class="p-track-title">' + titles[i] + '</div>' +
+            '<div class="p-track-artist">' + currentArtists[i] + '</div>' +
+        '</div>';
+
+        trackList.appendChild(item);
+    }
+}
+
 displaySong();
 selectedSong();
+updateTrackList();
