@@ -55,6 +55,7 @@ function togglePlay()
     }
 
     displaySong();
+    selectedSong();
 }
 
 function nextSong()
@@ -75,6 +76,8 @@ function nextSong()
 
     document.getElementById("toggle-play-icon").innerHTML = `pause`; // insert svg
     displaySong();
+    selectedSong();
+
 }
 
 function prevSong()
@@ -95,6 +98,7 @@ function prevSong()
 
     document.getElementById("toggle-play-icon").innerHTML = `pause`; // insert svg
     displaySong();
+    selectedSong();
 }
 
 function changePlaylist(chosenPlaylist)
@@ -115,6 +119,39 @@ function changePlaylist(chosenPlaylist)
     </svg>`;
 
     displaySong();
+    selectedSong();
+}
+
+function changeSong(chosenSong)
+{
+    music.pause();
+
+    currentSong = chosenSong;
+
+    music = new Audio(playlists[currentPlaylist][currentSong]);
+    music.volume = document.getElementById("volume").value / 100;
+    music.play();
+
+    isPlaying = true;
+
+    document.getElementById("toggle-play-icon").innerHTML = `pause`; // placeholder for pause svg
+    displaySong();
+    selectedSong();
+}
+
+function selectedSong()
+{
+    var allSongs = document.getElementsByClassName("playlist-track-item");
+
+    for (var i = 0; i < allSongs.length; i++)
+    {
+        allSongs[i].classList.remove("active");
+    }
+
+    if (allSongs[currentSong])
+    {
+        allSongs[currentSong].classList.add("active");
+    }
 }
 
 function changeVolume()
@@ -174,3 +211,4 @@ document.querySelectorAll('.sfx-item').forEach(function (item) {
 });
 
 displaySong();
+selectedSong();
