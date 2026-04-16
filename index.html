@@ -62,15 +62,15 @@
 
     <!-- ── Scene Selectors (bottom-left) ── -->
     <nav id="scene-selectors" aria-label="Scene selection">
-      <button class="scene-icon active" data-scene="dollhouse" aria-label="Haunted Doll House">
+      <button //onclick="changePlaylist('DollHouse')" class="scene-icon active" data-scene="dollhouse" aria-label="Haunted Doll House">
         <img src="assets/images/dollhouse.png" width="22" height="22" alt="Doll House" style="filter: invert(0.7);">
         <span class="scene-label">Doll House</span>
       </button>
-      <button class="scene-icon" data-scene="garden" aria-label="Fairy Garden">
+      <button //onclick="changePlaylist('Garden')" class="scene-icon" data-scene="garden" aria-label="Fairy Garden">
        <img src="assets/images/garden.png" width="22" height="22" alt="Garden" style="filter: invert(0.7);">
         <span class="scene-label">Fairy garden</span>
       </button>
-      <button class="scene-icon" data-scene="ballroom" aria-label="Vampire Ballroom">
+      <button //onclick="changePlaylist('Ballroom')" class="scene-icon" data-scene="ballroom" aria-label="Vampire Ballroom">
         <img src="assets/images/ballroom.svg" width="22" height="22" alt="Ballroom" style="filter: invert(0.7);">
         <span class="scene-label">Vampire ballroom</span>
       </button>
@@ -176,7 +176,7 @@
 
       <!-- Playback controls (centre) -->
       <div class="player-controls">
-        <button onclick="toggelShuffle()" class="ctrl-btn" id="btn-shuffle" aria-label="Shuffle" title="Shuffle">
+        <button onclick="toggleShuffle()" class="ctrl-btn" id="btn-shuffle" aria-label="Shuffle" title="Shuffle">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="16 3 21 3 21 8"/>
@@ -237,15 +237,15 @@
 
       <!-- Left: playlist covers -->
       <div class="playlist-covers">
-        <div class="playlist-cover-item active" data-playlist="dollhouse">
+        <div onclick="changePlaylist('DollHouse')" class="playlist-cover-item active" data-playlist="dollhouse">
           <img class="cover-img" src="assets/scenes/dollhouse/dolls-1.jpg" alt="Doll House">
           <div class="cover-label">Doll House</div>
         </div>
-        <div class="playlist-cover-item" data-playlist="garden">
+        <div onclick="changePlaylist('Garden')" class="playlist-cover-item" data-playlist="garden">
           <img class="cover-img" src="assets/scenes/fairy-garden/1.jpg" alt="Garden">
           <div class="cover-label">Garden</div>
         </div>
-        <div class="playlist-cover-item" data-playlist="ballroom">
+        <div onclick="changePlaylist('Ballroom')" class="playlist-cover-item" data-playlist="ballroom">
           <img class="cover-img" src="assets/scenes/ballroom/1.jpg" alt="Ballroom">
           <div class="cover-label">Ballroom</div>
         </div>
