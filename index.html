@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ambient Studies</title>
+  <link rel="icon" type="image/png" href="assets/images/icon.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -62,75 +63,88 @@
     <!-- ── Scene Selectors (bottom-left) ── -->
     <nav id="scene-selectors" aria-label="Scene selection">
       <button class="scene-icon active" data-scene="dollhouse" aria-label="Haunted Doll House">
-        <div class="icon-placeholder"></div>
+        <img src="assets/images/dollhouse.png" width="22" height="22" alt="Doll House" style="filter: invert(0.7);">
         <span class="scene-label">Doll House</span>
       </button>
       <button class="scene-icon" data-scene="garden" aria-label="Fairy Garden">
-        <div class="icon-placeholder"></div>
-        <span class="scene-label">Garden</span>
+       <img src="assets/images/garden.png" width="22" height="22" alt="Garden" style="filter: invert(0.7);">
+        <span class="scene-label">Fairy garden</span>
       </button>
       <button class="scene-icon" data-scene="ballroom" aria-label="Vampire Ballroom">
-        <div class="icon-placeholder"></div>
-        <span class="scene-label">Ballroom</span>
+        <img src="assets/images/ballroom.svg" width="22" height="22" alt="Ballroom" style="filter: invert(0.7);">
+        <span class="scene-label">Vampire ballroom</span>
       </button>
     </nav>
 
 
     <!-- ── Ambient SFX Volume Controls (bottom-right) ── -->
+ <!-- ── Ambient Sounds Panel (bottom-right) ── -->
     <div id="sfx-area">
       <div id="sfx-list">
-        <div class="sfx-list-header">Volume</div>
+        <div class="sfx-list-header">Ambient Sounds</div>
+
+        <div class="sfx-group-label">Weather</div>
 
         <div class="sfx-item">
-          <svg class="sfx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
-          </svg>
-          <span class="sfx-name">Music Volume</span>
-          <input type="range" class="sfx-slider" data-sfx="music" min="0" max="100" value="70">
+          <button class="sfx-play-btn" data-ambient="assets/audio/ambient/rain.mp3" aria-label="Toggle Rain">&#9654;</button>
+          <span class="sfx-name">Rain</span>
+          <input type="range" class="sfx-slider" min="0" max="100" value="50">
         </div>
 
         <div class="sfx-item">
-          <svg class="sfx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-            <line x1="4" y1="8" x2="4" y2="16"/><line x1="8" y1="5" x2="8" y2="19"/>
-            <line x1="12" y1="3" x2="12" y2="21"/><line x1="16" y1="7" x2="16" y2="17"/>
-            <line x1="20" y1="10" x2="20" y2="14"/>
-          </svg>
-          <span class="sfx-name">Ambient Volume</span>
-          <input type="range" class="sfx-slider" data-sfx="ambient" min="0" max="100" value="50">
+          <button class="sfx-play-btn" data-ambient="assets/audio/ambient/thunder.mp3" aria-label="Toggle Thunder">&#9654;</button>
+          <span class="sfx-name">Thunder</span>
+          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+        </div>
+
+        <div class="sfx-group-label">Atmosphere</div>
+
+        <div class="sfx-item">
+          <button class="sfx-play-btn" data-ambient="assets/audio/ambient/fire.mp3" aria-label="Toggle Fireplace">&#9654;</button>
+          <span class="sfx-name">Fireplace</span>
+          <input type="range" class="sfx-slider" min="0" max="100" value="50">
         </div>
 
         <div class="sfx-item">
-          <svg class="sfx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 17.58A5 5 0 0 0 18 8h-1.26A8 8 0 1 0 4 16.25"/>
-            <line x1="8" y1="16" x2="8.01" y2="21"/><line x1="12" y1="13" x2="12.01" y2="18"/>
-            <line x1="16" y1="16" x2="16.01" y2="21"/>
-          </svg>
-          <span class="sfx-name">Weather Volume</span>
-          <input type="range" class="sfx-slider" data-sfx="weather" min="0" max="100" value="40">
+          <button class="sfx-play-btn" data-ambient="assets/audio/ambient/atmosphere.mp3" aria-label="Toggle Atmosphere">&#9654;</button>
+          <span class="sfx-name">Distant Echoes</span>
+          <input type="range" class="sfx-slider" min="0" max="100" value="50">
         </div>
 
         <div class="sfx-item">
-          <svg class="sfx-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-               stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-            <line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/>
-          </svg>
-          <span class="sfx-name">Interface Volume</span>
-          <input type="range" class="sfx-slider" data-sfx="interface" min="0" max="100" value="60">
+          <button class="sfx-play-btn" data-ambient="assets/audio/ambient/whispers.mp3" aria-label="Toggle Whispers">&#9654;</button>
+          <span class="sfx-name">Whispers</span>
+          <input type="range" class="sfx-slider" min="0" max="100" value="50">
         </div>
+
+        <div class="sfx-item">
+          <button class="sfx-play-btn" data-ambient="assets/audio/ambient/cry.mp3" aria-label="Toggle Cry">&#9654;</button>
+          <span class="sfx-name">Distant Cry</span>
+          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+        </div>
+
+        <div class="sfx-group-label">Room Sounds</div>
+
+        <div class="sfx-item">
+          <button class="sfx-play-btn" data-ambient="assets/audio/ambient/typewriter.mp3" aria-label="Toggle Typewriter">&#9654;</button>
+          <span class="sfx-name">Typewriter</span>
+          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+        </div>
+
+        <div class="sfx-item">
+          <button class="sfx-play-btn" data-ambient="assets/audio/ambient/laugh.mp3" aria-label="Toggle Laughter">&#9654;</button>
+          <span class="sfx-name">Ghostly Laughter</span>
+          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+        </div>
+
       </div>
 
-      <button id="btn-sfx-toggle" aria-label="Toggle volume controls" title="Volume Controls">
+      <button id="btn-sfx-toggle" aria-label="Toggle ambient sounds" title="Ambient Sounds">
+        <!-- Headphones icon instead of equalizer bars -->
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-             stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-          <line x1="4" y1="8" x2="4" y2="16"/>
-          <line x1="8" y1="5" x2="8" y2="19"/>
-          <line x1="12" y1="3" x2="12" y2="21"/>
-          <line x1="16" y1="7" x2="16" y2="17"/>
-          <line x1="20" y1="10" x2="20" y2="14"/>
+             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
         </svg>
       </button>
     </div>
@@ -224,15 +238,15 @@
       <!-- Left: playlist covers -->
       <div class="playlist-covers">
         <div class="playlist-cover-item active" data-playlist="dollhouse">
-          <div class="cover-placeholder"></div>
+          <img class="cover-img" src="assets/scenes/dollhouse/dolls-1.jpg" alt="Doll House">
           <div class="cover-label">Doll House</div>
         </div>
         <div class="playlist-cover-item" data-playlist="garden">
-          <div class="cover-placeholder" style="background:var(--accent-crimson);"></div>
+          <img class="cover-img" src="assets/scenes/fairy-garden/1.jpg" alt="Garden">
           <div class="cover-label">Garden</div>
         </div>
         <div class="playlist-cover-item" data-playlist="ballroom">
-          <div class="cover-placeholder" style="background:var(--accent-purple);"></div>
+          <img class="cover-img" src="assets/scenes/ballroom/1.jpg" alt="Ballroom">
           <div class="cover-label">Ballroom</div>
         </div>
       </div>

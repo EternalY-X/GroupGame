@@ -115,3 +115,53 @@ function changeVolume()
 }
 
 displaySong();
+// ── Ambient Sounds ──
+// Each play button creates/reuses an Audio object, loops it, toggled on/off.
+// Each slider controls that sound's individual volume.
+
+var ambientSounds = {};  // key: file path, value: Audio object
+
+document.querySelectorAll('.sfx-play-btn').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var src = btn.dataset.ambient;
+    if (!src) return;
+
+    // Create audio if first time
+    if (!ambientSounds[src]) {
+      ambientSounds[src] = new Audio(src);
+      ambientSounds[src].loop = true;
+      // Read the slider value next to this button
+      var slider = btn.parentElement.querySelector('.sfx-slider');
+      if (slider) ambientSounds[src].volume = slider.value / 100;
+    }
+
+    var audio = ambientSounds[src];
+
+    if (btn.classList.contains('playing')) {
+      // Stop
+      audio.pause();
+      audio.currentTime = 0;
+      btn.classList.remove('playing');
+      btn.innerHTML = '&#9654;';  // play triangle
+    } else {
+      // Play
+      audio.play();
+      btn.classList.add('playing');
+      btn.innerHTML = '&#10074;&#10074;';  // pause bars
+    }
+  });
+});
+
+// Wire individual volume sliders
+document.querySelectorAll('.sfx-item').forEach(function (item) {
+  var btn = item.querySelector('.sfx-play-btn');
+  var slider = item.querySelector('.sfx-slider');
+  if (!btn || !slider) return;
+
+  slider.addEventListener('input', function () {
+    var src = btn.dataset.ambient;
+    if (src && ambientSounds[src]) {
+      ambientSounds[src].volume = slider.value / 100;
+    }
+  });
+});
