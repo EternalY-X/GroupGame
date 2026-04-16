@@ -63,11 +63,26 @@ function nextSong()
 {
     music.pause();
 
-    currentSong = currentSong + 1;
-
-    if (currentSong >= playlists[currentPlaylist].length)
+    if(isShuffle == true)
     {
-        currentSong = 0;
+        var randomSong = currentSong;
+
+        while (randomSong == currentSong && playlists[currentPlaylist].length > 1)
+        {
+            randomSong = Math.floor(Math.random() * playlists[currentPlaylist].length);
+        }
+
+        currentSong = randomSong;
+    } 
+
+    else
+    {
+        currentSong = currentSong + 1;
+    
+        if (currentSong >= playlists[currentPlaylist].length)
+        {
+            currentSong = 0;
+        }
     }
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
@@ -114,6 +129,7 @@ function toggleShuffle()
 {
     isShuffle = !isShuffle;
 }
+
 
 function changePlaylist(chosenPlaylist)
 {
