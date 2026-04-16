@@ -27,6 +27,7 @@ var music = new Audio(playlists[currentPlaylist][currentSong]);
 var ambient = new Audio(""); // need ambient audio
 ambient.loop = true;
 var isPlaying = false;
+var isShuffle = false;
 
 function displaySong()
 {
@@ -70,6 +71,10 @@ function nextSong()
     }
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
+    music.onended = function()
+    {
+        nextSong();
+    }
     music.volume = document.getElementById("volume").value / 100;
     music.play();
     isPlaying = true;
@@ -92,6 +97,10 @@ function prevSong()
     }
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
+    music.onended = function()
+    {
+        nextSong();
+    }
     music.volume = document.getElementById("volume").value / 100;
     music.play();
     isPlaying = true;
@@ -99,6 +108,11 @@ function prevSong()
     document.getElementById("toggle-play-icon").innerHTML = `pause`; // insert svg
     displaySong();
     selectedSong();
+}
+
+function toggleShuffle()
+{
+    isShuffle = !isShuffle;
 }
 
 function changePlaylist(chosenPlaylist)
@@ -109,6 +123,10 @@ function changePlaylist(chosenPlaylist)
     currentSong = 0;
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
+    music.onended = function()
+    {
+        nextSong();
+    }
     music.volume = document.getElementById("volume").value / 100;
 
     isPlaying = false;
@@ -129,6 +147,10 @@ function changeSong(chosenSong)
     currentSong = chosenSong;
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
+    music.onended = function()
+    {
+        nextSong();
+    }
     music.volume = document.getElementById("volume").value / 100;
     music.play();
 
