@@ -3,22 +3,22 @@
 var playlists =
 {
     DollHouse: ["assets/audio/doll-house/1-requiem-lacrimosa-mozart.mp3", "assets/audio/doll-house/2-lullaby-brahms.mp3", "assets/audio/doll-house/3-badinerie-bach.mp3", "assets/audio/doll-house/4-beethoven-for-elise.mp3"],
-    Garden: [],
-    Ballroom: []
-}; // need more songs
+    Garden: ["assets/audio/garden/1-nocturne-chopin.mp3", "assets/audio/garden/2-clair-de-lune.mp3", "assets/audio/garden/3-moonlight-sonata.mp3", "assets/audio/garden/4-gymnopedie-erik_satie.mp3"],
+    Ballroom: ["assets/audio/ballroom/1-gnossienne.mp3", "assets/audio/ballroom/2-toccata-and-fugue.mp3", "assets/audio/ballroom/3-297-winter.mp3", "assets/audio/ballroom/4-cello-suite-1-bach.mp3", "assets/audio/ballroom/5-moonlight-sonata.mp3"]
+};
 
 var names =
 {
-    DollHouse: ["ph1", "ph2", "ph3", "ph4"],
-    Garden: [],
-    Ballroom: []
+    DollHouse: ["Mozart – Requiem in D minor: Lacrimosa, K. 626", "Brahms – Lullaby / Wiegenlied, Op. 49, No. 4", "Bach – Badinerie, Suite No. 2 in B minor, BWV 1067", "Beethoven – Für Elise, WoO 59"],
+    Garden: ["Chopin – Nocturne in E-flat major, Op. 9, No. 2", "Debussy – Clair de Lune, Suite bergamasque, L. 75", "Beethoven – Piano Sonata No. 14 \"Moonlight\", Op. 27, No. 2", "Satie – Gymnopédie No. 1, from Trois Gymnopédies"],
+    Ballroom: ["Satie – Gymnopédie No. 1", "Bach – Toccata and Fugue in D minor, BWV 565", "Vivaldi – The Four Seasons: Winter, RV 297", "Bach – Cello Suite No. 1 in G major, BWV 1007", "Beethoven – Piano Sonata No. 14 \"Moonlight\", Op. 27, No. 2"]
 };
 
 var currentPlaylist = "DollHouse";
 var currentSong = 0;
 var music = new Audio(playlists[currentPlaylist][currentSong]);
-var ambient = new Audio("") // need ambient audio
-ambient.loop = true
+var ambient = new Audio(""); // need ambient audio
+ambient.loop = true;
 var isPlaying = false;
 
 function displaySong()
@@ -165,3 +165,5 @@ document.querySelectorAll('.sfx-item').forEach(function (item) {
     }
   });
 });
+
+displaySong();
