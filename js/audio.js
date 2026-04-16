@@ -122,7 +122,6 @@ function changeVolume()
     music.volume = document.getElementById("volume").value / 100;
 }
 
-displaySong();
 // ── Ambient Sounds ──
 // Each play button creates/reuses an Audio object, loops it, toggled on/off.
 // Each slider controls that sound's individual volume.
