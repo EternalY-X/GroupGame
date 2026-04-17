@@ -31,6 +31,10 @@ var playlistSubtitles =
 var currentPlaylist = "DollHouse";
 var currentSong = 0;
 var music = new Audio(playlists[currentPlaylist][currentSong]);
+music.onended = function() {
+    if (isRepeat) { music.currentTime = 0; music.play(); }
+    else { nextSong(); }
+};
 var ambient = new Audio(""); // need ambient audio
 ambient.loop = true;
 var isPlaying = false;

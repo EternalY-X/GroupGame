@@ -1,103 +1,98 @@
-// timer.js — Pomodoro timer
+// timer.js — Pomodoro timer (pomofocus-style)
 
-var focusTime = 25 * 60;//25 * 60
+var focusTime = 25 * 60;
 var shortBreak = 5 * 60;
 var longBreak = 15 * 60;
 var timeLeft = focusTime;
-var timer;
-var timerDone = new Audio("assets/audio/end-timer.mp3");
-var isBreak = false;
+var currentMode = 'focus';  // 'focus', 'short', 'long'
+var timer = null;
 var breakCount = 0;
 
-
-// display time in MM/SS
-function displayTime()
-{
-    var mins = Math.floor(timeLeft/60);
-    var secs = timeLeft%60;
-
-    document.getElementById("timer-display").textContent = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`
+function displayTime() {
+    var mins = Math.floor(timeLeft / 60);
+    var secs = timeLeft % 60;
+    document.getElementById("timer-display").textContent =
+        String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
 }
 
-function countdown()
-{
-    if (timeLeft > 0)
-    {
+function countdown() {
+    if (timeLeft > 0) {
         timeLeft--;
         displayTime();
-    }
-
-    else
-    {
-        clearInterval(timer);
-        timer = null;
-        timerDone.play();
-
-        if(isBreak == false)
-        {
-            startBreak();
-        }
-
-        else
-        {
-            startFocus();
+    } else {
+        pauseTimer();
+        // Auto-advance to next mode
+        if (currentMode === 'focus') {
+            breakCount++;
+            if (breakCount >= 4) {
+                switchTimerMode('long');
+                breakCount = 0;
+            } else {
+                switchTimerMode('short');
+            }
+        } else {
+            switchTimerMode('focus');
         }
     }
 }
 
-function startBreak()
-{
-    isBreak = true;
+function toggleTimer() {
+    var btn = document.getElementById('btn-timer-main');
+    var skipBtn = document.getElementById('btn-timer-skip');
 
-    if(breakCount < 3)
-    {
-        timeLeft = shortBreak;
+    if (timer) {
+        // Pause
+        pauseTimer();
+        btn.textContent = 'START';
+        skipBtn.style.display = 'none';
+    } else {
+        // Start
+        timer = setInterval(countdown, 1000);
+        btn.textContent = 'PAUSE';
+        skipBtn.style.display = '';
+    }
+}
+
+function pauseTimer() {
+    clearInterval(timer);
+    timer = null;
+}
+
+function skipTimer() {
+    pauseTimer();
+    if (currentMode === 'focus') {
         breakCount++;
-        document.querySelector('.timer-label').textContent = "Short Break";
+        if (breakCount >= 4) {
+            switchTimerMode('long');
+            breakCount = 0;
+        } else {
+            switchTimerMode('short');
+        }
+    } else {
+        switchTimerMode('focus');
     }
-    else
-    {
-        timeLeft = longBreak;
-        breakCount = 0;
-        document.querySelector('.timer-label').textContent = "Long Break";
-    }
-    displayTime();
-    startTimer();
 }
 
-function startFocus()
-{
-    isBreak = false;
-    timeLeft = focusTime;
-    document.querySelector('.timer-label').textContent = "Focus Session";
+function switchTimerMode(mode) {
+    pauseTimer();
+    currentMode = mode;
+
+    if (mode === 'focus') timeLeft = focusTime;
+    else if (mode === 'short') timeLeft = shortBreak;
+    else if (mode === 'long') timeLeft = longBreak;
 
     displayTime();
-    startTimer();
-}
 
-function startTimer()
-{
-    if(timer) return;
+    // Update tabs
+    document.querySelectorAll('.timer-tab').forEach(function (tab) {
+        tab.classList.remove('active');
+    });
+    var tabMap = { focus: 0, short: 1, long: 2 };
+    document.querySelectorAll('.timer-tab')[tabMap[mode]].classList.add('active');
 
-    timer = setInterval(countdown, 1000)
-}
-
-function pauseTimer()
-{
-    clearInterval(timer);
-    timer = null;
-}
-
-function resetTimer()
-{
-    clearInterval(timer);
-    timer = null;
-    timeLeft = focusTime;
-    isBreak = false;
-    breakCount = 0;
-    document.querySelector('.timer-label').textContent = "Focus Session";
-
-    displayTime();
+    // Reset button state
+    document.getElementById('btn-timer-main').textContent = 'START';
+    document.getElementById('btn-timer-skip').style.display = 'none';
 }
 
 displayTime();
