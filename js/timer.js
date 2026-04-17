@@ -53,13 +53,13 @@ function startBreak()
     {
         timeLeft = shortBreak;
         breakCount++;
-        document.getElementById("timer-label").textContent = "Short Break";
+        document.querySelector('.timer-label').textContent = "Short Break";
     }
     else
     {
         timeLeft = longBreak;
         breakCount = 0;
-        document.getElementById("timer-label").textContent = "Long Break";
+        document.querySelector('.timer-label').textContent = "Long Break";
     }
     displayTime();
     startTimer();
@@ -69,7 +69,7 @@ function startFocus()
 {
     isBreak = false;
     timeLeft = focusTime;
-    document.getElementById("timer-label").textContent = "Focus Session";
+    document.querySelector('.timer-label').textContent = "Focus Session";
 
     displayTime();
     startTimer();
@@ -95,7 +95,7 @@ function resetTimer()
     timeLeft = focusTime;
     isBreak = false;
     breakCount = 0;
-    document.getElementById("timer-label").textContent = "Focus Session";
+    document.querySelector('.timer-label').textContent = "Focus Session";
 
     displayTime();
 }
