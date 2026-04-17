@@ -57,7 +57,7 @@ function togglePlay()
     {
         music.pause();
         isPlaying = false
-        document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
+        document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21"></polygon></svg>';
     }
 
     displaySong();
@@ -196,8 +196,8 @@ function changePlaylist(chosenPlaylist)
     displaySong();
     var subtitle = document.querySelector('.playlist-subtitle');
     if (subtitle) subtitle.textContent = playlistSubtitles[currentPlaylist] || '';
-    selectedSong();
     updateTrackList();
+    selectedSong();
 }
 
 function changeSong(chosenSong)
@@ -348,73 +348,72 @@ function updateTrackList()
     }
 }
 
-displaySong();
-
 // Audio unlocked by welcome overlay click
 var audioUnlocked = false;
 
 document.getElementById('welcome-overlay').addEventListener('click', function () {
-  audioUnlocked = true;
-
-  // Fade out overlay
-  this.classList.add('hidden');
-  setTimeout(function () {
-    document.getElementById('welcome-overlay').style.display = 'none';
-  }, 1000);
-
-  // Start music
-  music.volume = document.getElementById("volume").value / 100;
-  music.play().catch(function(){});
-  isPlaying = true;
-  document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
-  displaySong();
-
-  // Start default SFX
-  var defaults = sceneSFX['dollhouse'];
-  if (defaults) {
-    defaults.forEach(function (src) {
-      if (!ambientSounds[src]) {
-        ambientSounds[src] = new Audio(src);
-        ambientSounds[src].loop = true;
-        var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
-        var slider = btn ? btn.parentElement.querySelector('.sfx-slider') : null;
-        if (slider) ambientSounds[src].volume = slider.value / 100;
-      }
-      ambientSounds[src].play().catch(function(){});
-      var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
-      if (btn) {
-        btn.classList.add('playing');
-        btn.innerHTML = '&#10074;&#10074;';
-      }
-    });
-    updateAmbientBtnState();
-  }
+    audioUnlocked = true;
+    
+    // Fade out overlay
+    this.classList.add('hidden');
+    setTimeout(function () {
+        document.getElementById('welcome-overlay').style.display = 'none';
+    }, 1000);
+    
+    // Start music
+    music.volume = document.getElementById("volume").value / 100;
+    music.play().catch(function(){});
+    isPlaying = true;
+    document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
+    displaySong();
+    
+    // Start default SFX
+    var defaults = sceneSFX['dollhouse'];
+    if (defaults) {
+        defaults.forEach(function (src) {
+            if (!ambientSounds[src]) {
+                ambientSounds[src] = new Audio(src);
+                ambientSounds[src].loop = true;
+                var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+                var slider = btn ? btn.parentElement.querySelector('.sfx-slider') : null;
+                if (slider) ambientSounds[src].volume = slider.value / 100;
+            }
+            ambientSounds[src].play().catch(function(){});
+            var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+            if (btn) {
+                btn.classList.add('playing');
+                btn.innerHTML = '&#10074;&#10074;';
+            }
+        });
+        updateAmbientBtnState();
+    }
 });
 
-selectedSong();
-updateTrackList();
 var sceneSFX = {
-  dollhouse: ['assets/audio/ambient/cry.mp3', 'assets/audio/ambient/laugh.mp3'],
-  garden: ['assets/audio/ambient/thunder.mp3', 'assets/audio/ambient/atmosphere.mp3'],
-  ballroom: ['assets/audio/ambient/fire.mp3', 'assets/audio/ambient/whispers.mp3'],
+    dollhouse: ['assets/audio/ambient/cry.mp3', 'assets/audio/ambient/laugh.mp3'],
+    garden: ['assets/audio/ambient/thunder.mp3', 'assets/audio/ambient/atmosphere.mp3'],
+    ballroom: ['assets/audio/ambient/fire.mp3', 'assets/audio/ambient/whispers.mp3'],
 };
 
 function switchSceneSFX(sceneKey) {
-  // Stop all currently playing ambient sounds
-  document.querySelectorAll('.sfx-play-btn.playing').forEach(function (btn) {
-    btn.click();  // toggles off
-  });
-
-  // Start the defaults for this scene
-  var defaults = sceneSFX[sceneKey];
-  if (!defaults) return;
-
-  defaults.forEach(function (src) {
-    var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
-    if (btn && !btn.classList.contains('playing')) {
-      btn.click();  // toggles on
-    }
-  });
+    // Stop all currently playing ambient sounds
+    document.querySelectorAll('.sfx-play-btn.playing').forEach(function (btn) {
+        btn.click();  // toggles off
+    });
+    
+    // Start the defaults for this scene
+    var defaults = sceneSFX[sceneKey];
+    if (!defaults) return;
+    
+    defaults.forEach(function (src) {
+        var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+        if (btn && !btn.classList.contains('playing')) {
+            btn.click();  // toggles on
+        }
+    });
 }
 window.changePlaylist = changePlaylist;
 window.switchSceneSFX = switchSceneSFX;
+displaySong();
+updateTrackList();
+selectedSong();
