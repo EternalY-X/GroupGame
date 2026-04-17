@@ -1,16 +1,5 @@
 // timer.js — Pomodoro timer (pomofocus-style)
 
-// Request notification permission on load
-if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
-}
-
-function sendTimerNotification(title, body) {
-    if ('Notification' in window && Notification.permission === 'granted') {
-        new Notification(title, { body: body, icon: 'assets/images/icon.png' });
-    }
-}
-
 var focusTime = 25 * 60;
 var shortBreak = 5 * 60;
 var longBreak = 15 * 60;
@@ -25,12 +14,24 @@ function displayTime() {
     var secs = timeLeft % 60;
     document.getElementById("timer-display").textContent =
         String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        var modeLabel = currentMode === 'focus' ? 'Focus' : currentMode === 'short' ? 'Short Break' : 'Long Break';
+    document.title = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0') + ' | ' + modeLabel + " | Ambient Studies";
 }
 
 function countdown() {
     if (timeLeft > 0) {
         timeLeft--;
         displayTime();
+        // Request notification permission on load
+if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+}
+
+function sendTimerNotification(title, body) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, { body: body, icon: 'assets/images/icon.png' });
+    }
+}
   } else {
         pauseTimer();
         timerDone.play().catch(function(){});
@@ -100,6 +101,7 @@ function switchTimerMode(mode) {
     else if (mode === 'long') timeLeft = longBreak;
 
     displayTime();
+    document.title = 'Ambient Studies';
 
     // Update tabs
     document.querySelectorAll('.timer-tab').forEach(function (tab) {
@@ -114,3 +116,9 @@ function switchTimerMode(mode) {
 }
 
 displayTime();
+window.addEventListener('beforeunload', function (e) {
+    if (timer) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
