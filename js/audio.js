@@ -50,17 +50,14 @@ function togglePlay()
     {
         music.play();
         isPlaying = true
-        icon.innerHTML = `pause`; //insert pause svg
+        document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     }
 
     else
     {
         music.pause();
         isPlaying = false
-        icon.innerHTML =
-        `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <polygon points="6 3 20 12 6 21"/>
-        </svg>`;
+        document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     }
 
     displaySong();
@@ -81,12 +78,12 @@ function nextSong()
         }
 
         currentSong = randomSong;
-    } 
+    }
 
     else
     {
         currentSong = currentSong + 1;
-    
+
         if (currentSong >= playlists[currentPlaylist].length)
         {
             currentSong = 0;
@@ -99,7 +96,9 @@ function nextSong()
         if(isRepeat == true)
         {
             music.currentTime = 0;
+            music.play();
         }
+
         else
         {
             nextSong();
@@ -109,7 +108,7 @@ function nextSong()
     music.play();
     isPlaying = true;
 
-    document.getElementById("toggle-play-icon").innerHTML = `pause`; // insert svg
+    document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     displaySong();
     selectedSong();
 
@@ -132,6 +131,7 @@ function prevSong()
         if(isRepeat == true)
         {
             music.currentTime = 0;
+            music.play();
         }
         else
         {
@@ -142,7 +142,7 @@ function prevSong()
     music.play();
     isPlaying = true;
 
-    document.getElementById("toggle-play-icon").innerHTML = `pause`; // insert svg
+    document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     displaySong();
     selectedSong();
 }
@@ -150,15 +150,18 @@ function prevSong()
 function toggleShuffle()
 {
     isShuffle = !isShuffle;
+    document.getElementById('btn-shuffle').classList.toggle('ctrl-active', isShuffle);
 }
 
 function toggleRepeat()
 {
     isRepeat = !isRepeat;
+    document.getElementById('btn-repeat').classList.toggle('ctrl-active', isRepeat);
 }
 
 function changePlaylist(chosenPlaylist)
 {
+    var wasPlaying = isPlaying;
     music.pause();
 
     currentPlaylist = chosenPlaylist;
@@ -170,6 +173,7 @@ function changePlaylist(chosenPlaylist)
         if(isRepeat == true)
         {
             music.currentTime = 0;
+            music.play();
         }
         else
         {
@@ -178,12 +182,16 @@ function changePlaylist(chosenPlaylist)
     }
     music.volume = document.getElementById("volume").value / 100;
 
-    isPlaying = false;
-
-    document.getElementById("toggle-play-icon").innerHTML = 
-    `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <polygon points="6 3 20 12 6 21"></polygon>
-    </svg>`;
+    // If music was playing before the switch, keep playing
+    if (wasPlaying) {
+        music.play();
+        isPlaying = true;
+        document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
+    } else {
+        isPlaying = false;
+        document.getElementById("toggle-play-icon").innerHTML =
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21"></polygon></svg>';
+    }
 
     displaySong();
     var subtitle = document.querySelector('.playlist-subtitle');
@@ -204,6 +212,7 @@ function changeSong(chosenSong)
         if(isRepeat == true)
         {
             music.currentTime = 0;
+            music.play();
         }
         else
         {
@@ -215,7 +224,7 @@ function changeSong(chosenSong)
 
     isPlaying = true;
 
-    document.getElementById("toggle-play-icon").innerHTML = `pause`; // placeholder for pause svg
+    document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     displaySong();
     selectedSong();
 }
@@ -245,6 +254,7 @@ function changeVolume()
 // Each slider controls that sound's individual volume.
 
 var ambientSounds = {};  // key: file path, value: Audio object
+window.ambientSounds = ambientSounds;
 
 document.querySelectorAll('.sfx-play-btn').forEach(function (btn) {
   btn.addEventListener('click', function () {
@@ -268,11 +278,13 @@ document.querySelectorAll('.sfx-play-btn').forEach(function (btn) {
       audio.currentTime = 0;
       btn.classList.remove('playing');
       btn.innerHTML = '&#9654;';  // play triangle
+      updateAmbientBtnState();
     } else {
       // Play
       audio.play();
       btn.classList.add('playing');
       btn.innerHTML = '&#10074;&#10074;';  // pause bars
+      updateAmbientBtnState();
     }
   });
 });
@@ -291,10 +303,19 @@ document.querySelectorAll('.sfx-item').forEach(function (item) {
   });
 });
 
+function updateAmbientBtnState() {
+  var anyPlaying = document.querySelector('.sfx-play-btn.playing');
+  var toggleBtn = document.getElementById('btn-sfx-toggle');
+  if (anyPlaying) {
+    toggleBtn.classList.add('sfx-active');
+  } else {
+    toggleBtn.classList.remove('sfx-active');
+  }
+}
+
 function updateTrackList()
 {
-    var trackList = document.getElementsByClassName("playlist-track-list")[0];
-    
+    var trackList = document.getElementsByClassName("playlist-track-list")[0]; 
     document.getElementsByClassName("playlist-subtitle")[0].textContent =
     playlistSubtitles[currentPlaylist];
 
@@ -328,5 +349,72 @@ function updateTrackList()
 }
 
 displaySong();
+
+// Audio unlocked by welcome overlay click
+var audioUnlocked = false;
+
+document.getElementById('welcome-overlay').addEventListener('click', function () {
+  audioUnlocked = true;
+
+  // Fade out overlay
+  this.classList.add('hidden');
+  setTimeout(function () {
+    document.getElementById('welcome-overlay').style.display = 'none';
+  }, 1000);
+
+  // Start music
+  music.volume = document.getElementById("volume").value / 100;
+  music.play().catch(function(){});
+  isPlaying = true;
+  document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
+  displaySong();
+
+  // Start default SFX
+  var defaults = sceneSFX['dollhouse'];
+  if (defaults) {
+    defaults.forEach(function (src) {
+      if (!ambientSounds[src]) {
+        ambientSounds[src] = new Audio(src);
+        ambientSounds[src].loop = true;
+        var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+        var slider = btn ? btn.parentElement.querySelector('.sfx-slider') : null;
+        if (slider) ambientSounds[src].volume = slider.value / 100;
+      }
+      ambientSounds[src].play().catch(function(){});
+      var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+      if (btn) {
+        btn.classList.add('playing');
+        btn.innerHTML = '&#10074;&#10074;';
+      }
+    });
+    updateAmbientBtnState();
+  }
+});
+
 selectedSong();
 updateTrackList();
+var sceneSFX = {
+  dollhouse: ['assets/audio/ambient/cry.mp3', 'assets/audio/ambient/laugh.mp3'],
+  garden: ['assets/audio/ambient/thunder.mp3', 'assets/audio/ambient/atmosphere.mp3'],
+  ballroom: ['assets/audio/ambient/fire.mp3', 'assets/audio/ambient/whispers.mp3'],
+};
+
+function switchSceneSFX(sceneKey) {
+  // Stop all currently playing ambient sounds
+  document.querySelectorAll('.sfx-play-btn.playing').forEach(function (btn) {
+    btn.click();  // toggles off
+  });
+
+  // Start the defaults for this scene
+  var defaults = sceneSFX[sceneKey];
+  if (!defaults) return;
+
+  defaults.forEach(function (src) {
+    var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+    if (btn && !btn.classList.contains('playing')) {
+      btn.click();  // toggles on
+    }
+  });
+}
+window.changePlaylist = changePlaylist;
+window.switchSceneSFX = switchSceneSFX;
