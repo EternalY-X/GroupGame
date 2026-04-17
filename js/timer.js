@@ -1,8 +1,8 @@
 // timer.js — Pomodoro timer
 
-var focusTime = 0.25 * 60;
-var shortBreak = 0.05 * 60;
-var longBreak = 0.15 * 60;
+var focusTime = 25 * 60;
+var shortBreak = 5 * 60;
+var longBreak = 15 * 60;
 var timeLeft = focusTime;
 var timer;
 var timerDone = new Audio("TimerEndsAudio"); //Needs to be added
