@@ -624,6 +624,36 @@ button { font-family: inherit; }
 }
 
 /* ============================================
+   WELCOME OVERLAY
+   ============================================ */
+#welcome-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: var(--bg-void);
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: opacity 1s ease;
+}
+#welcome-overlay.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.welcome-content { text-align: center; }
+.welcome-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  margin-bottom: 16px;
+}
+.welcome-subtitle {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ============================================
    RESPONSIVE
    ============================================ */
 @media (max-width: 768px) {

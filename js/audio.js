@@ -352,20 +352,26 @@ function updateTrackList()
 
 displaySong();
 
-// Auto-play first song and SFX on first user interaction
-var hasStarted = false;
-document.addEventListener('click', function () {
-  if (hasStarted) return;
-  hasStarted = true;
+// Audio unlocked by welcome overlay click
+var audioUnlocked = false;
+
+document.getElementById('welcome-overlay').addEventListener('click', function () {
+  audioUnlocked = true;
+
+  // Fade out overlay
+  this.classList.add('hidden');
+  setTimeout(function () {
+    document.getElementById('welcome-overlay').style.display = 'none';
+  }, 1000);
 
   // Start music
   music.volume = document.getElementById("volume").value / 100;
   music.play().catch(function(){});
   isPlaying = true;
-  document.getElementById("toggle-play-icon").innerHTML = 'pause';
+  document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
   displaySong();
 
-  // Start default SFX — must be in same click handler call stack
+  // Start default SFX
   var defaults = sceneSFX['dollhouse'];
   if (defaults) {
     defaults.forEach(function (src) {
@@ -385,7 +391,7 @@ document.addEventListener('click', function () {
     });
     updateAmbientBtnState();
   }
-}, { once: true });
+});
 
 selectedSong();
 updateTrackList();
