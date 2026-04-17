@@ -1,8 +1,13 @@
 // timer.js — Pomodoro timer
 
-let timeLeft = 25 * 60;
-let timer;
-let timerDone = new Audio("TimerEndsAudio"); //Needs to be added
+var focusTime = 0.25 * 60;
+var shortBreak = 0.05 * 60;
+var longBreak = 0.15 * 60;
+var timeLeft = focusTime;
+var timer;
+var timerDone = new Audio("TimerEndsAudio"); //Needs to be added
+var isBreak = false;
+var breakCount = 0;
 
 
 // display time in MM/SS
@@ -27,7 +32,47 @@ function countdown()
         clearInterval(timer);
         timer = null;
         timerDone.play();
+
+        if(isBreak == false)
+        {
+            startBreak();
+        }
+
+        else
+        {
+            startFocus();
+        }
     }
+}
+
+function startBreak()
+{
+    isBreak = true;
+
+    if(breakCount < 3)
+    {
+        timeLeft = shortBreak;
+        breakCount++;
+        document.getElementById("timer-label").textContent = "Short Break";
+    }
+    else
+    {
+        timeLeft = longBreak;
+        breakCount = 0;
+        document.getElementById("timer-label").textContent = "Long Break";
+    }
+    displayTime();
+    startTimer();
+}
+
+function startFocus()
+{
+    isbreak = false;
+    timeLeft = focusTime;
+    document.getElementById("timer-label").textContent = "Focus Session";
+
+    displayTime();
+    startTimer();
 }
 
 function startTimer()
@@ -47,7 +92,11 @@ function resetTimer()
 {
     clearInterval(timer);
     timer = null;
-    timeLeft = 25 * 60;
+    timeLeft = focusTime;
+    isbreak = false;
+    breakCount = 0;
+    document.getElementById("timer-label").textContent = "Focus Session";
+
     displayTime();
 }
 
