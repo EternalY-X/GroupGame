@@ -188,6 +188,7 @@
 
 // Switch ambient SFX and playlist — delayed to ensure audio.js is loaded
     setTimeout(function () {
+      if (window.resetSfxMuteState) window.resetSfxMuteState();
       if (window.switchSceneSFX) window.switchSceneSFX(sceneKey);
       var sceneToPlaylist = { dollhouse: 'DollHouse', garden: 'Garden', ballroom: 'Ballroom' };
       if (window.changePlaylist && sceneToPlaylist[sceneKey]) {
