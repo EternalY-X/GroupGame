@@ -3,27 +3,44 @@
 var playlists =
 {
     DollHouse: ["assets/audio/doll-house/1-requiem-lacrimosa-mozart.mp3", "assets/audio/doll-house/2-lullaby-brahms.mp3", "assets/audio/doll-house/3-badinerie-bach.mp3", "assets/audio/doll-house/4-beethoven-for-elise.mp3"],
-    Garden: [],
-    Ballroom: []
-}; // need more songs
+    Garden: ["assets/audio/garden/1-nocturne-chopin.mp3", "assets/audio/garden/2-clair-de-lune.mp3", "assets/audio/garden/3-moonlight-sonata.mp3", "assets/audio/garden/4-gymnopedie-erik_satie.mp3"],
+    Ballroom: ["assets/audio/ballroom/1-gnossienne.mp3", "assets/audio/ballroom/2-toccata-and-fugue.mp3", "assets/audio/ballroom/3-297-winter.mp3", "assets/audio/ballroom/4-cello-suite-1-bach.mp3", "assets/audio/ballroom/5-moonlight-sonata.mp3"]
+};
 
-var names =
+var songs =
 {
-    DollHouse: ["ph1", "ph2", "ph3", "ph4"],
-    Garden: [],
-    Ballroom: []
+    DollHouse: ["Requiem in D minor: Lacrimosa, K. 626", "Lullaby / Wiegenlied, Op. 49, No. 4", "Badinerie, Suite No. 2 in B minor, BWV 1067", "Für Elise, WoO 59"],
+    Garden: ["Nocturne in E-flat major, Op. 9, No. 2", "Clair de Lune, Suite bergamasque, L. 75", "Piano Sonata No. 14 \"Moonlight\", Op. 27, No. 2", "Gymnopédie No. 1, from Trois Gymnopédies"],
+    Ballroom: ["Gymnopédie No. 1", "Toccata and Fugue in D minor, BWV 565", "The Four Seasons: Winter, RV 297", "Cello Suite No. 1 in G major, BWV 1007", "Piano Sonata No. 14 \"Moonlight\", Op. 27, No. 2"]
+};
+
+var artists =
+{
+    DollHouse: ["Mozart", "Brahms", "Bach", "Beethoven"],
+    Garden: ["Chopin", "Debussy", "Beethoven", "Satie"],
+    Ballroom: ["Satie", "Bach", "Vivaldi", "Bach", "Beethoven"]
+}
+
+var playlistSubtitles =
+{
+    DollHouse: "Musicbox · haunted",
+    Garden: "Whimsical · melancholy",
+    Ballroom: "Waltz · enchanted"
 };
 
 var currentPlaylist = "DollHouse";
 var currentSong = 0;
 var music = new Audio(playlists[currentPlaylist][currentSong]);
-var ambient = new Audio("") // need ambient audio
-ambient.loop = true
+var ambient = new Audio(""); // need ambient audio
+ambient.loop = true;
 var isPlaying = false;
+var isShuffle = false;
+var isRepeat = false;
 
 function displaySong()
 {
-    document.getElementsByClassName("track-title")[0].textContent = names[currentPlaylist][currentSong];
+    document.getElementsByClassName("track-title")[0].textContent = songs[currentPlaylist][currentSong];
+    document.getElementsByClassName("track-artist")[0].textContent = artists[currentPlaylist][currentSong];
 }
 
 function togglePlay()
@@ -47,26 +64,55 @@ function togglePlay()
     }
 
     displaySong();
+    selectedSong();
 }
 
 function nextSong()
 {
     music.pause();
 
-    currentSong = currentSong + 1;
-
-    if (currentSong >= playlists[currentPlaylist].length)
+    if(isShuffle == true)
     {
-        currentSong = 0;
+        var randomSong = currentSong;
+
+        while (randomSong == currentSong && playlists[currentPlaylist].length > 1)
+        {
+            randomSong = Math.floor(Math.random() * playlists[currentPlaylist].length);
+        }
+
+        currentSong = randomSong;
+    } 
+
+    else
+    {
+        currentSong = currentSong + 1;
+    
+        if (currentSong >= playlists[currentPlaylist].length)
+        {
+            currentSong = 0;
+        }
     }
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
+    music.onended = function()
+    {
+        if(isRepeat == true)
+        {
+            music.currentTime = 0;
+        }
+        else
+        {
+            nextSong();
+        }
+    }
     music.volume = document.getElementById("volume").value / 100;
     music.play();
     isPlaying = true;
 
     document.getElementById("toggle-play-icon").innerHTML = `pause`; // insert svg
     displaySong();
+    selectedSong();
+
 }
 
 function prevSong()
@@ -81,12 +127,34 @@ function prevSong()
     }
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
+    music.onended = function()
+    {
+        if(isRepeat == true)
+        {
+            music.currentTime = 0;
+        }
+        else
+        {
+            nextSong();
+        }
+    }
     music.volume = document.getElementById("volume").value / 100;
     music.play();
     isPlaying = true;
 
     document.getElementById("toggle-play-icon").innerHTML = `pause`; // insert svg
     displaySong();
+    selectedSong();
+}
+
+function toggleShuffle()
+{
+    isShuffle = !isShuffle;
+}
+
+function toggleRepeat()
+{
+    isRepeat = !isRepeat;
 }
 
 function changePlaylist(chosenPlaylist)
@@ -97,6 +165,17 @@ function changePlaylist(chosenPlaylist)
     currentSong = 0;
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
+    music.onended = function()
+    {
+        if(isRepeat == true)
+        {
+            music.currentTime = 0;
+        }
+        else
+        {
+            nextSong();
+        }
+    }
     music.volume = document.getElementById("volume").value / 100;
 
     isPlaying = false;
@@ -107,6 +186,53 @@ function changePlaylist(chosenPlaylist)
     </svg>`;
 
     displaySong();
+    var subtitle = document.querySelector('.playlist-subtitle');
+    if (subtitle) subtitle.textContent = playlistSubtitles[currentPlaylist] || '';
+    selectedSong();
+    updateTrackList();
+}
+
+function changeSong(chosenSong)
+{
+    music.pause();
+
+    currentSong = chosenSong;
+
+    music = new Audio(playlists[currentPlaylist][currentSong]);
+    music.onended = function()
+    {
+        if(isRepeat == true)
+        {
+            music.currentTime = 0;
+        }
+        else
+        {
+            nextSong();
+        }
+    }
+    music.volume = document.getElementById("volume").value / 100;
+    music.play();
+
+    isPlaying = true;
+
+    document.getElementById("toggle-play-icon").innerHTML = `pause`; // placeholder for pause svg
+    displaySong();
+    selectedSong();
+}
+
+function selectedSong()
+{
+    var allSongs = document.getElementsByClassName("playlist-track-item");
+
+    for (var i = 0; i < allSongs.length; i++)
+    {
+        allSongs[i].classList.remove("active");
+    }
+
+    if (allSongs[currentSong])
+    {
+        allSongs[currentSong].classList.add("active");
+    }
 }
 
 function changeVolume()
@@ -114,7 +240,6 @@ function changeVolume()
     music.volume = document.getElementById("volume").value / 100;
 }
 
-displaySong();
 // ── Ambient Sounds ──
 // Each play button creates/reuses an Audio object, loops it, toggled on/off.
 // Each slider controls that sound's individual volume.
@@ -165,3 +290,43 @@ document.querySelectorAll('.sfx-item').forEach(function (item) {
     }
   });
 });
+
+function updateTrackList()
+{
+    var trackList = document.getElementsByClassName("playlist-track-list")[0];
+    
+    document.getElementsByClassName("playlist-subtitle")[0].textContent =
+    playlistSubtitles[currentPlaylist];
+
+    trackList.innerHTML = "";
+
+    var titles = songs[currentPlaylist];
+    var currentArtists = artists[currentPlaylist];
+
+    for (var i = 0; i < titles.length; i++)
+    {
+        var item = document.createElement("div");
+        item.className = "playlist-track-item";
+
+        item.onclick = (function(index)
+        {
+            return function()
+            {
+                changeSong(index);
+            };
+        })(i);
+
+        item.innerHTML =
+        '<span class="p-track-num">' + (i + 1).toString().padStart(2, '0') + '</span>' +
+        '<div>' +
+            '<div class="p-track-title">' + titles[i] + '</div>' +
+            '<div class="p-track-artist">' + currentArtists[i] + '</div>' +
+        '</div>';
+
+        trackList.appendChild(item);
+    }
+}
+
+displaySong();
+selectedSong();
+updateTrackList();

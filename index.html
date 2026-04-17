@@ -176,7 +176,7 @@
 
       <!-- Playback controls (centre) -->
       <div class="player-controls">
-        <button class="ctrl-btn" id="btn-shuffle" aria-label="Shuffle" title="Shuffle">
+        <button onclick="toggleShuffle()" class="ctrl-btn" id="btn-shuffle" aria-label="Shuffle" title="Shuffle">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="16 3 21 3 21 8"/>
@@ -205,7 +205,7 @@
             <polygon points="2 4 16 12 2 20"/>
           </svg>
         </button>
-        <button class="ctrl-btn" id="btn-repeat" aria-label="Repeat" title="Repeat">
+        <button onclick="toggleRepeat()" class="ctrl-btn" id="btn-repeat" aria-label="Repeat" title="Repeat">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="17 1 21 5 17 9"/>
@@ -237,15 +237,15 @@
 
       <!-- Left: playlist covers -->
       <div class="playlist-covers">
-        <div class="playlist-cover-item active" data-playlist="dollhouse">
+        <div onclick="changePlaylist('DollHouse')" class="playlist-cover-item active" data-playlist="dollhouse">
           <img class="cover-img" src="assets/scenes/dollhouse/dolls-1.jpg" alt="Doll House">
           <div class="cover-label">Doll House</div>
         </div>
-        <div class="playlist-cover-item" data-playlist="garden">
+        <div onclick="changePlaylist('Garden')" class="playlist-cover-item" data-playlist="garden">
           <img class="cover-img" src="assets/scenes/fairy-garden/1.jpg" alt="Garden">
           <div class="cover-label">Garden</div>
         </div>
-        <div class="playlist-cover-item" data-playlist="ballroom">
+        <div onclick="changePlaylist('Ballroom')" class="playlist-cover-item" data-playlist="ballroom">
           <img class="cover-img" src="assets/scenes/ballroom/1.jpg" alt="Ballroom">
           <div class="cover-label">Ballroom</div>
         </div>
@@ -258,28 +258,28 @@
           <div class="playlist-subtitle">Musicbox &middot; haunted</div>
         </div>
         <div class="playlist-track-list">
-          <div class="playlist-track-item active">
+          <div onclick="changeSong(0)" class="playlist-track-item">
             <span class="p-track-num">01</span>
             <div>
               <div class="p-track-title">The Requiem in D minor, K. 626 (Classic.de)</div>
               <div class="p-track-artist">Wolfgang Amadeus Mozart</div>
             </div>
           </div>
-          <div class="playlist-track-item">
+          <div onclick="changeSong(1)" class="playlist-track-item">
             <span class="p-track-num">02</span>
             <div>
               <div class="p-track-title">Lullaby / Wiegenlied - Op. 49, No. 4 (Classic.de)</div>
               <div class="p-track-artist">Johannes Brahms</div>
             </div>
           </div>
-          <div class="playlist-track-item">
+          <div onclick="changeSong(2)" class="playlist-track-item">
             <span class="p-track-num">03</span>
             <div>
               <div class="p-track-title">Badinerie - BWV 1067 (Classic.de)</div>
               <div class="p-track-artist">Johann Sebastian Bach</div>
             </div>
           </div>
-          <div class="playlist-track-item">
+          <div onclick="changeSong(3)" class="playlist-track-item">
             <span class="p-track-num">04</span>
             <div>
               <div class="p-track-title">For Elise - WoO 59 (Classic.de)</div>
