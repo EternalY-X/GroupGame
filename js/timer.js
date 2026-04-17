@@ -1,6 +1,6 @@
 // timer.js — Pomodoro timer (pomofocus-style)
 
-var focusTime = 25 * 60;
+var focusTime = 1 * 10;
 var shortBreak = 5 * 60;
 var longBreak = 15 * 60;
 var timeLeft = focusTime;
@@ -20,8 +20,9 @@ function countdown() {
     if (timeLeft > 0) {
         timeLeft--;
         displayTime();
-    } else {
+  } else {
         pauseTimer();
+        timerDone.play().catch(function(){});
         // Auto-advance to next mode
         if (currentMode === 'focus') {
             breakCount++;

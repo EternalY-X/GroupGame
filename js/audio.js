@@ -32,9 +32,12 @@ var currentPlaylist = "DollHouse";
 var currentSong = 0;
 var music = new Audio(playlists[currentPlaylist][currentSong]);
 music.onended = function() {
-    if (isRepeat) { music.currentTime = 0; music.play(); }
-    else { nextSong(); }
-};
+        if (isRepeat) {
+            changeSong(currentSong);  // reload same song cleanly
+        } else {
+            nextSong();
+        }
+    };
 var ambient = new Audio(""); // need ambient audio
 ambient.loop = true;
 var isPlaying = false;
@@ -95,19 +98,13 @@ function nextSong()
     }
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
-    music.onended = function()
-    {
-        if(isRepeat == true)
-        {
-            music.currentTime = 0;
-            music.play();
-        }
-
-        else
-        {
+music.onended = function() {
+        if (isRepeat) {
+            changeSong(currentSong);  // reload same song cleanly
+        } else {
             nextSong();
         }
-    }
+    };
     music.volume = document.getElementById("volume").value / 100;
     music.play();
     isPlaying = true;
@@ -130,18 +127,13 @@ function prevSong()
     }
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
-    music.onended = function()
-    {
-        if(isRepeat == true)
-        {
-            music.currentTime = 0;
-            music.play();
-        }
-        else
-        {
+    music.onended = function() {
+        if (isRepeat) {
+            changeSong(currentSong);  // reload same song cleanly
+        } else {
             nextSong();
         }
-    }
+    };
     music.volume = document.getElementById("volume").value / 100;
     music.play();
     isPlaying = true;
@@ -172,18 +164,13 @@ function changePlaylist(chosenPlaylist)
     currentSong = 0;
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
-    music.onended = function()
-    {
-        if(isRepeat == true)
-        {
-            music.currentTime = 0;
-            music.play();
-        }
-        else
-        {
+    music.onended = function() {
+        if (isRepeat) {
+            changeSong(currentSong);  // reload same song cleanly
+        } else {
             nextSong();
         }
-    }
+    };
     music.volume = document.getElementById("volume").value / 100;
 
     // If music was playing before the switch, keep playing
@@ -211,18 +198,13 @@ function changeSong(chosenSong)
     currentSong = chosenSong;
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
-    music.onended = function()
-    {
-        if(isRepeat == true)
-        {
-            music.currentTime = 0;
-            music.play();
-        }
-        else
-        {
+    music.onended = function() {
+        if (isRepeat) {
+            changeSong(currentSong);  // reload same song cleanly
+        } else {
             nextSong();
         }
-    }
+    };
     music.volume = document.getElementById("volume").value / 100;
     music.play();
 
