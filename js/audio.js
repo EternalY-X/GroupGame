@@ -14,7 +14,7 @@ var songs =
     Ballroom: ["Gymnopédie No. 1", "Toccata and Fugue in D minor, BWV 565", "The Four Seasons: Winter, RV 297", "Cello Suite No. 1 in G major, BWV 1007", "Piano Sonata No. 14 \"Moonlight\", Op. 27, No. 2"]
 };
 
-var artists = 
+var artists =
 {
     DollHouse: ["Mozart", "Brahms", "Bach", "Beethoven"],
     Garden: ["Chopin", "Debussy", "Beethoven", "Satie"],
@@ -24,8 +24,8 @@ var artists =
 var playlistSubtitles =
 {
     DollHouse: "Musicbox · haunted",
-    Garden: "placeholder 1",
-    Ballroom: " placeholder 2"
+    Garden: "Whimsical · melancholy",
+    Ballroom: "Waltz · enchanted"
 };
 
 var currentPlaylist = "DollHouse";
@@ -186,6 +186,8 @@ function changePlaylist(chosenPlaylist)
     </svg>`;
 
     displaySong();
+    var subtitle = document.querySelector('.playlist-subtitle');
+    if (subtitle) subtitle.textContent = playlistSubtitles[currentPlaylist] || '';
     selectedSong();
     updateTrackList();
 }
