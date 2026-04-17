@@ -25,6 +25,8 @@ function displayTime() {
     var secs = timeLeft % 60;
     document.getElementById("timer-display").textContent =
         String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+        var modeLabel = currentMode === 'focus' ? 'Focus' : currentMode === 'short' ? 'Short Break' : 'Long Break';
+    document.title = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0') + ' - ' + modeLabel + " | Ambient Studies";
 }
 
 function countdown() {
@@ -100,6 +102,7 @@ function switchTimerMode(mode) {
     else if (mode === 'long') timeLeft = longBreak;
 
     displayTime();
+    document.title = 'Ambient Studies';
 
     // Update tabs
     document.querySelectorAll('.timer-tab').forEach(function (tab) {
