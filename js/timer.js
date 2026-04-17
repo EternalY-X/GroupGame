@@ -67,7 +67,7 @@ function startBreak()
 
 function startFocus()
 {
-    isbreak = false;
+    isBreak = false;
     timeLeft = focusTime;
     document.getElementById("timer-label").textContent = "Focus Session";
 
@@ -93,7 +93,7 @@ function resetTimer()
     clearInterval(timer);
     timer = null;
     timeLeft = focusTime;
-    isbreak = false;
+    isBreak = false;
     breakCount = 0;
     document.getElementById("timer-label").textContent = "Focus Session";
 
