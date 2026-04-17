@@ -117,3 +117,9 @@ function switchTimerMode(mode) {
 }
 
 displayTime();
+window.addEventListener('beforeunload', function (e) {
+    if (timer) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
