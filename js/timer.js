@@ -11,7 +11,7 @@ function sendTimerNotification(title, body) {
     }
 }
 
-var focusTime = 1 * 10;
+var focusTime = 25 * 60;
 var shortBreak = 5 * 60;
 var longBreak = 15 * 60;
 var timeLeft = focusTime;
