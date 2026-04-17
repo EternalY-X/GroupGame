@@ -50,17 +50,14 @@ function togglePlay()
     {
         music.play();
         isPlaying = true
-        icon.innerHTML = `pause`; //insert pause svg
+        document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     }
 
     else
     {
         music.pause();
         isPlaying = false
-        icon.innerHTML =
-        `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-        <polygon points="6 3 20 12 6 21"/>
-        </svg>`;
+        document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     }
 
     displaySong();
@@ -111,7 +108,7 @@ function nextSong()
     music.play();
     isPlaying = true;
 
-    document.getElementById("toggle-play-icon").innerHTML = `pause`; // insert svg
+    document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     displaySong();
     selectedSong();
 
@@ -145,7 +142,7 @@ function prevSong()
     music.play();
     isPlaying = true;
 
-    document.getElementById("toggle-play-icon").innerHTML = `pause`; // insert svg
+    document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     displaySong();
     selectedSong();
 }
@@ -189,7 +186,7 @@ function changePlaylist(chosenPlaylist)
     if (wasPlaying) {
         music.play();
         isPlaying = true;
-        document.getElementById("toggle-play-icon").innerHTML = 'pause';
+        document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     } else {
         isPlaying = false;
         document.getElementById("toggle-play-icon").innerHTML =
@@ -227,7 +224,7 @@ function changeSong(chosenSong)
 
     isPlaying = true;
 
-    document.getElementById("toggle-play-icon").innerHTML = `pause`; // placeholder for pause svg
+    document.getElementById("toggle-play-icon").innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="5" y="3" width="4" height="18" rx="1"/><rect x="15" y="3" width="4" height="18" rx="1"/></svg>';
     displaySong();
     selectedSong();
 }
