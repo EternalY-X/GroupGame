@@ -6,6 +6,7 @@ var longBreak = 15 * 60;
 var timeLeft = focusTime;
 var currentMode = 'focus';  // 'focus', 'short', 'long'
 var timer = null;
+var timerDone = new Audio("assets/audio/end-timer.mp3");
 var breakCount = 0;
 
 function displayTime() {
