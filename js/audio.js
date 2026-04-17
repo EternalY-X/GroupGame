@@ -99,7 +99,9 @@ function nextSong()
         if(isRepeat == true)
         {
             music.currentTime = 0;
+            music.play();
         }
+
         else
         {
             nextSong();
@@ -132,6 +134,7 @@ function prevSong()
         if(isRepeat == true)
         {
             music.currentTime = 0;
+            music.play();
         }
         else
         {
@@ -150,15 +153,18 @@ function prevSong()
 function toggleShuffle()
 {
     isShuffle = !isShuffle;
+    document.getElementById('btn-shuffle').classList.toggle('ctrl-active', isShuffle);
 }
 
 function toggleRepeat()
 {
     isRepeat = !isRepeat;
+    document.getElementById('btn-repeat').classList.toggle('ctrl-active', isRepeat);
 }
 
 function changePlaylist(chosenPlaylist)
 {
+    var wasPlaying = isPlaying;
     music.pause();
 
     currentPlaylist = chosenPlaylist;
@@ -170,6 +176,7 @@ function changePlaylist(chosenPlaylist)
         if(isRepeat == true)
         {
             music.currentTime = 0;
+            music.play();
         }
         else
         {
@@ -178,12 +185,16 @@ function changePlaylist(chosenPlaylist)
     }
     music.volume = document.getElementById("volume").value / 100;
 
-    isPlaying = false;
-
-    document.getElementById("toggle-play-icon").innerHTML =
-    `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-    <polygon points="6 3 20 12 6 21"></polygon>
-    </svg>`;
+    // If music was playing before the switch, keep playing
+    if (wasPlaying) {
+        music.play();
+        isPlaying = true;
+        document.getElementById("toggle-play-icon").innerHTML = 'pause';
+    } else {
+        isPlaying = false;
+        document.getElementById("toggle-play-icon").innerHTML =
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 3 20 12 6 21"></polygon></svg>';
+    }
 
     displaySong();
     var subtitle = document.querySelector('.playlist-subtitle');
@@ -204,6 +215,7 @@ function changeSong(chosenSong)
         if(isRepeat == true)
         {
             music.currentTime = 0;
+            music.play();
         }
         else
         {
@@ -340,25 +352,39 @@ function updateTrackList()
 
 displaySong();
 
-// Auto-play first song on first user interaction
+// Auto-play first song and SFX on first user interaction
 var hasStarted = false;
 document.addEventListener('click', function () {
   if (hasStarted) return;
   hasStarted = true;
 
-  // Only auto-play if user didn't click the play button directly
-  if (!isPlaying) {
-    music.volume = document.getElementById("volume").value / 100;
-    music.play();
-    isPlaying = true;
-    document.getElementById("toggle-play-icon").innerHTML = 'pause';
-    displaySong();
-  }
+  // Start music
+  music.volume = document.getElementById("volume").value / 100;
+  music.play().catch(function(){});
+  isPlaying = true;
+  document.getElementById("toggle-play-icon").innerHTML = 'pause';
+  displaySong();
 
-  // Start default scene SFX after a small delay (lets browser register the gesture)
-  setTimeout(function () {
-    switchSceneSFX('dollhouse');
-  }, 100);
+  // Start default SFX — must be in same click handler call stack
+  var defaults = sceneSFX['dollhouse'];
+  if (defaults) {
+    defaults.forEach(function (src) {
+      if (!ambientSounds[src]) {
+        ambientSounds[src] = new Audio(src);
+        ambientSounds[src].loop = true;
+        var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+        var slider = btn ? btn.parentElement.querySelector('.sfx-slider') : null;
+        if (slider) ambientSounds[src].volume = slider.value / 100;
+      }
+      ambientSounds[src].play().catch(function(){});
+      var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+      if (btn) {
+        btn.classList.add('playing');
+        btn.innerHTML = '&#10074;&#10074;';
+      }
+    });
+    updateAmbientBtnState();
+  }
 }, { once: true });
 
 selectedSong();

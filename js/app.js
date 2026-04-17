@@ -49,9 +49,54 @@
   const btnSfx  = document.getElementById('btn-sfx-toggle');
   const sfxList = document.getElementById('sfx-list');
 
+  let sfxPanelOpen = false;
+
   btnSfx.addEventListener('click', () => {
-    sfxList.classList.toggle('open');
+    if (!sfxPanelOpen) {
+      // First click: open the panel
+      sfxList.classList.add('open');
+      sfxPanelOpen = true;
+    } else {
+      // Second click: close panel and mute all SFX
+      sfxList.classList.remove('open');
+      sfxPanelOpen = false;
+
+      // Stop all ambient sounds
+      document.querySelectorAll('.sfx-play-btn.playing').forEach(btn => {
+        btn.click();
+      });
+
+      // Swap to crossed icon
+      btnSfx.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 18v-6a9 9 0 0 1 18 0v6"/>
+          <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/>
+          <line x1="2" y1="2" x2="22" y2="22"/>
+        </svg>`;
+    }
   });
+
+  // Close panel when clicking outside (but don't mute)
+  document.addEventListener('click', (e) => {
+    if (sfxPanelOpen
+        && sfxList.classList.contains('open')
+        && !sfxList.contains(e.target)
+        && e.target !== btnSfx
+        && !btnSfx.contains(e.target)) {
+      sfxList.classList.remove('open');
+      sfxPanelOpen = false;
+    }
+  });
+
+  // Restore normal icon when any SFX starts playing again
+  const originalSfxIcon = btnSfx.innerHTML;
+  const observer = new MutationObserver(() => {
+    if (document.querySelector('.sfx-play-btn.playing')) {
+      btnSfx.innerHTML = originalSfxIcon;
+    }
+  });
+  observer.observe(document.querySelector('#sfx-list'), { subtree: true, attributes: true, attributeFilter: ['class'] });
 
   document.addEventListener('click', (e) => {
     if (sfxList.classList.contains('open')

@@ -664,4 +664,8 @@ button { font-family: inherit; }
     max-height: 50vh;
   }
 
+  .ctrl-btn.ctrl-active {
+  color: var(--accent-warm);
+}
+
 }
