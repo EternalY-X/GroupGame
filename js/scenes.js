@@ -185,6 +185,15 @@
     var fxLayer = document.getElementById('layer-css-fx');
     fxLayer.className = 'scene-layer';
     if (sceneKey === 'ballroom') fxLayer.classList.add('scene-ballroom');
+
+// Switch ambient SFX and playlist — delayed to ensure audio.js is loaded
+    setTimeout(function () {
+      if (window.switchSceneSFX) window.switchSceneSFX(sceneKey);
+      var sceneToPlaylist = { dollhouse: 'DollHouse', garden: 'Garden', ballroom: 'Ballroom' };
+      if (window.changePlaylist && sceneToPlaylist[sceneKey]) {
+        window.changePlaylist(sceneToPlaylist[sceneKey]);
+      }
+    }, 0);
   }
 
   function startCycle() {
@@ -602,5 +611,4 @@
   } else {
     init();
   }
-
 })();

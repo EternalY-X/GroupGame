@@ -81,12 +81,12 @@ function nextSong()
         }
 
         currentSong = randomSong;
-    } 
+    }
 
     else
     {
         currentSong = currentSong + 1;
-    
+
         if (currentSong >= playlists[currentPlaylist].length)
         {
             currentSong = 0;
@@ -180,7 +180,7 @@ function changePlaylist(chosenPlaylist)
 
     isPlaying = false;
 
-    document.getElementById("toggle-play-icon").innerHTML = 
+    document.getElementById("toggle-play-icon").innerHTML =
     `<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
     <polygon points="6 3 20 12 6 21"></polygon>
     </svg>`;
@@ -268,11 +268,13 @@ document.querySelectorAll('.sfx-play-btn').forEach(function (btn) {
       audio.currentTime = 0;
       btn.classList.remove('playing');
       btn.innerHTML = '&#9654;';  // play triangle
+      updateAmbientBtnState();
     } else {
       // Play
       audio.play();
       btn.classList.add('playing');
       btn.innerHTML = '&#10074;&#10074;';  // pause bars
+      updateAmbientBtnState();
     }
   });
 });
@@ -291,10 +293,19 @@ document.querySelectorAll('.sfx-item').forEach(function (item) {
   });
 });
 
+function updateAmbientBtnState() {
+  var anyPlaying = document.querySelector('.sfx-play-btn.playing');
+  var toggleBtn = document.getElementById('btn-sfx-toggle');
+  if (anyPlaying) {
+    toggleBtn.classList.add('sfx-active');
+  } else {
+    toggleBtn.classList.remove('sfx-active');
+  }
+}
+
 function updateTrackList()
 {
-    var trackList = document.getElementsByClassName("playlist-track-list")[0];
-    
+    var trackList = document.getElementsByClassName("playlist-track-list")[0]; 
     document.getElementsByClassName("playlist-subtitle")[0].textContent =
     playlistSubtitles[currentPlaylist];
 
@@ -328,5 +339,52 @@ function updateTrackList()
 }
 
 displaySong();
+
+// Auto-play first song on first user interaction
+var hasStarted = false;
+document.addEventListener('click', function () {
+  if (hasStarted) return;
+  hasStarted = true;
+
+  // Only auto-play if user didn't click the play button directly
+  if (!isPlaying) {
+    music.volume = document.getElementById("volume").value / 100;
+    music.play();
+    isPlaying = true;
+    document.getElementById("toggle-play-icon").innerHTML = 'pause';
+    displaySong();
+  }
+
+  // Start default scene SFX after a small delay (lets browser register the gesture)
+  setTimeout(function () {
+    switchSceneSFX('dollhouse');
+  }, 100);
+}, { once: true });
+
 selectedSong();
 updateTrackList();
+var sceneSFX = {
+  dollhouse: ['assets/audio/ambient/cry.mp3', 'assets/audio/ambient/laugh.mp3'],
+  garden: ['assets/audio/ambient/thunder.mp3', 'assets/audio/ambient/atmosphere.mp3'],
+  ballroom: ['assets/audio/ambient/fire.mp3', 'assets/audio/ambient/whispers.mp3'],
+};
+
+function switchSceneSFX(sceneKey) {
+  // Stop all currently playing ambient sounds
+  document.querySelectorAll('.sfx-play-btn.playing').forEach(function (btn) {
+    btn.click();  // toggles off
+  });
+
+  // Start the defaults for this scene
+  var defaults = sceneSFX[sceneKey];
+  if (!defaults) return;
+
+  defaults.forEach(function (src) {
+    var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+    if (btn && !btn.classList.contains('playing')) {
+      btn.click();  // toggles on
+    }
+  });
+}
+window.changePlaylist = changePlaylist;
+window.switchSceneSFX = switchSceneSFX;

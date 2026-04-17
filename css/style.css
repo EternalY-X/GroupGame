@@ -359,6 +359,10 @@ button { font-family: inherit; }
   background: rgba(184,160,128,0.15);
   color: var(--accent-warm);
 }
+#btn-sfx-toggle.sfx-active {
+  border-color: var(--accent-warm);
+  color: var(--accent-warm);
+}
 
 /* ============================================
    NOW-PLAYING BAR  (bottom-centre, compact)
@@ -659,4 +663,5 @@ button { font-family: inherit; }
     width: 220px;
     max-height: 50vh;
   }
+
 }
