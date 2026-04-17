@@ -31,6 +31,7 @@ var playlistSubtitles =
 var currentPlaylist = "DollHouse";
 var currentSong = 0;
 var music = new Audio(playlists[currentPlaylist][currentSong]);
+music.onended = function() { nextSong(); };
 var ambient = new Audio(""); // need ambient audio
 ambient.loop = true;
 var isPlaying = false;
@@ -91,19 +92,8 @@ function nextSong()
     }
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
-    music.onended = function()
-    {
-        if(isRepeat == true)
-        {
-            music.currentTime = 0;
-            music.play();
-        }
-
-        else
-        {
-            nextSong();
-        }
-    }
+    music.loop = isRepeat;
+music.onended = function() { nextSong(); };
     music.volume = document.getElementById("volume").value / 100;
     music.play();
     isPlaying = true;
@@ -126,18 +116,8 @@ function prevSong()
     }
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
-    music.onended = function()
-    {
-        if(isRepeat == true)
-        {
-            music.currentTime = 0;
-            music.play();
-        }
-        else
-        {
-            nextSong();
-        }
-    }
+    music.loop = isRepeat;
+    music.onended = function() { nextSong(); };
     music.volume = document.getElementById("volume").value / 100;
     music.play();
     isPlaying = true;
@@ -156,6 +136,7 @@ function toggleShuffle()
 function toggleRepeat()
 {
     isRepeat = !isRepeat;
+    music.loop = isRepeat;
     document.getElementById('btn-repeat').classList.toggle('ctrl-active', isRepeat);
 }
 
@@ -168,18 +149,8 @@ function changePlaylist(chosenPlaylist)
     currentSong = 0;
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
-    music.onended = function()
-    {
-        if(isRepeat == true)
-        {
-            music.currentTime = 0;
-            music.play();
-        }
-        else
-        {
-            nextSong();
-        }
-    }
+    music.loop = isRepeat;
+    music.onended = function() { nextSong(); };
     music.volume = document.getElementById("volume").value / 100;
 
     // If music was playing before the switch, keep playing
@@ -207,18 +178,8 @@ function changeSong(chosenSong)
     currentSong = chosenSong;
 
     music = new Audio(playlists[currentPlaylist][currentSong]);
-    music.onended = function()
-    {
-        if(isRepeat == true)
-        {
-            music.currentTime = 0;
-            music.play();
-        }
-        else
-        {
-            nextSong();
-        }
-    }
+    music.loop = isRepeat;
+   music.onended = function() { nextSong(); };
     music.volume = document.getElementById("volume").value / 100;
     music.play();
 
@@ -396,21 +357,40 @@ var sceneSFX = {
 };
 
 function switchSceneSFX(sceneKey) {
-    // Stop all currently playing ambient sounds
-    document.querySelectorAll('.sfx-play-btn.playing').forEach(function (btn) {
-        btn.click();  // toggles off
-    });
-    
-    // Start the defaults for this scene
-    var defaults = sceneSFX[sceneKey];
-    if (!defaults) return;
-    
-    defaults.forEach(function (src) {
-        var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
-        if (btn && !btn.classList.contains('playing')) {
-            btn.click();  // toggles on
-        }
-    });
+  // Hard-stop ALL ambient audio — playing, paused, or saved
+  Object.keys(ambientSounds).forEach(function (src) {
+    ambientSounds[src].pause();
+    ambientSounds[src].currentTime = 0;
+  });
+  document.querySelectorAll('.sfx-play-btn').forEach(function (btn) {
+    btn.classList.remove('playing');
+    btn.classList.remove('muted');
+    btn.innerHTML = '&#9654;';
+  });
+
+  // Start the defaults for this scene
+  var defaults = sceneSFX[sceneKey];
+  if (!defaults || !audioUnlocked) {
+    updateAmbientBtnState();
+    return;
+  }
+
+  defaults.forEach(function (src) {
+    if (!ambientSounds[src]) {
+      ambientSounds[src] = new Audio(src);
+      ambientSounds[src].loop = true;
+      var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+      var slider = btn ? btn.parentElement.querySelector('.sfx-slider') : null;
+      if (slider) ambientSounds[src].volume = slider.value / 100;
+    }
+    ambientSounds[src].play().catch(function(){});
+    var btn = document.querySelector('.sfx-play-btn[data-ambient="' + src + '"]');
+    if (btn) {
+      btn.classList.add('playing');
+      btn.innerHTML = '&#10074;&#10074;';
+    }
+  });
+  updateAmbientBtnState();
 }
 window.changePlaylist = changePlaylist;
 window.switchSceneSFX = switchSceneSFX;

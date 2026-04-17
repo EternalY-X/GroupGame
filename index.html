@@ -58,14 +58,21 @@
        ========================================== -->
   <div id="ui-overlay">
 
-    <!-- ── Pomodoro Timer (top-left) ── -->
     <section id="timer-card" aria-label="Pomodoro timer">
-      <div id="timer-label" class="timer-label">Focus Session</div>
+      <div class="timer-tabs">
+        <button class="timer-tab active" onclick="switchTimerMode('focus')">Pomodoro</button>
+        <button class="timer-tab" onclick="switchTimerMode('short')">Short Break</button>
+        <button class="timer-tab" onclick="switchTimerMode('long')">Long Break</button>
+      </div>
       <div class="timer-display" id="timer-display">25:00</div>
       <div class="timer-controls">
-        <button onclick="startTimer()" class="timer-btn" id="btn-timer-start" aria-label="Start timer">&#9654;</button>
-        <button onclick="pauseTimer()" class="timer-btn" id="btn-timer-pause" aria-label="Pause timer">&#10074;&#10074;</button>
-        <button onclick="resetTimer()" class="timer-btn" id="btn-timer-reset" aria-label="Reset timer">&#8634;</button>
+        <button onclick="toggleTimer()" class="timer-main-btn" id="btn-timer-main">START</button>
+        <button onclick="skipTimer()" class="timer-skip-btn" id="btn-timer-skip" style="display:none;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <rect x="19" y="4" width="3" height="16" rx="1"/>
+            <polygon points="2 4 16 12 2 20"/>
+          </svg>
+        </button>
       </div>
     </section>
 
@@ -98,13 +105,13 @@
         <div class="sfx-item">
           <button class="sfx-play-btn" data-ambient="assets/audio/ambient/rain.mp3" aria-label="Toggle Rain">&#9654;</button>
           <span class="sfx-name">Rain</span>
-          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+          <input type="range" class="sfx-slider" min="0" max="100" value="30">
         </div>
 
         <div class="sfx-item">
           <button class="sfx-play-btn" data-ambient="assets/audio/ambient/thunder.mp3" aria-label="Toggle Thunder">&#9654;</button>
           <span class="sfx-name">Thunder</span>
-          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+          <input type="range" class="sfx-slider" min="0" max="100" value="30">
         </div>
 
         <div class="sfx-group-label">Atmosphere</div>
@@ -112,25 +119,25 @@
         <div class="sfx-item">
           <button class="sfx-play-btn" data-ambient="assets/audio/ambient/fire.mp3" aria-label="Toggle Fireplace">&#9654;</button>
           <span class="sfx-name">Fireplace</span>
-          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+          <input type="range" class="sfx-slider" min="0" max="100" value="30">
         </div>
 
         <div class="sfx-item">
           <button class="sfx-play-btn" data-ambient="assets/audio/ambient/atmosphere.mp3" aria-label="Toggle Atmosphere">&#9654;</button>
           <span class="sfx-name">Distant Echoes</span>
-          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+          <input type="range" class="sfx-slider" min="0" max="100" value="30">
         </div>
 
         <div class="sfx-item">
           <button class="sfx-play-btn" data-ambient="assets/audio/ambient/whispers.mp3" aria-label="Toggle Whispers">&#9654;</button>
           <span class="sfx-name">Whispers</span>
-          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+          <input type="range" class="sfx-slider" min="0" max="100" value="30">
         </div>
 
         <div class="sfx-item">
           <button class="sfx-play-btn" data-ambient="assets/audio/ambient/cry.mp3" aria-label="Toggle Cry">&#9654;</button>
           <span class="sfx-name">Distant Cry</span>
-          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+          <input type="range" class="sfx-slider" min="0" max="100" value="30">
         </div>
 
         <div class="sfx-group-label">Room Sounds</div>
@@ -138,13 +145,13 @@
         <div class="sfx-item">
           <button class="sfx-play-btn" data-ambient="assets/audio/ambient/typewriter.mp3" aria-label="Toggle Typewriter">&#9654;</button>
           <span class="sfx-name">Typewriter</span>
-          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+          <input type="range" class="sfx-slider" min="0" max="100" value="30">
         </div>
 
         <div class="sfx-item">
           <button class="sfx-play-btn" data-ambient="assets/audio/ambient/laugh.mp3" aria-label="Toggle Laughter">&#9654;</button>
           <span class="sfx-name">Ghostly Laughter</span>
-          <input type="range" class="sfx-slider" min="0" max="100" value="50">
+          <input type="range" class="sfx-slider" min="0" max="100" value="30">
         </div>
 
       </div>

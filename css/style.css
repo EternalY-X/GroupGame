@@ -135,50 +135,98 @@ button { font-family: inherit; }
   border-color: var(--accent-warm);
   color: var(--accent-warm);
 }
-
-/* ============================================
-   POMODORO TIMER  (top-left)
-   ============================================ */
 #timer-card {
   position: absolute;
   top: 24px; left: 24px;
-  width: var(--timer-size);
-  padding: 20px 16px;
-  background: rgba(17, 17, 17, 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius);
+  width: 240px;
+  padding: 20px;
+  background: rgba(10, 10, 10, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glow);
+  border-radius: var(--radius-lg);
   text-align: center;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.7);
 }
-#timer-card .timer-label {
+
+.timer-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 20px;
+  background: var(--bg-void);
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  padding: 2px;
+}
+
+.timer-tab {
+  flex: 1;
+  padding: 8px 4px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
   font-family: var(--font-display);
-  font-size: 0.65rem; letter-spacing: 0.2em;
-  text-transform: uppercase; color: var(--accent-warm);
-  margin-bottom: 8px;
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all var(--transition);
 }
+.timer-tab:hover { color: var(--text-secondary); }
+.timer-tab.active {
+  background: var(--bg-card);
+  color: var(--accent-warm);
+  box-shadow: 0 0 8px rgba(184,160,128,0.1);
+}
+
 #timer-card .timer-display {
   font-family: var(--font-display);
-  font-size: 1.8rem; font-weight: 700;
-  color: var(--text-primary); letter-spacing: 0.08em;
+  font-size: 3rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+  text-shadow: 0 0 20px rgba(184,160,128,0.15);
 }
-#timer-card .timer-controls {
-  margin-top: 14px;
-  display: flex; justify-content: center; gap: 10px;
+
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
-.timer-btn {
+
+.timer-main-btn {
+  padding: 10px 40px;
+  border-radius: var(--radius);
+  border: 1px solid var(--accent-warm);
+  background: rgba(184,160,128,0.08);
+  color: var(--accent-warm);
+  font-family: var(--font-display);
+  font-size: 0.65rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.timer-main-btn:hover {
+  background: rgba(184,160,128,0.18);
+  box-shadow: 0 0 12px rgba(184,160,128,0.12);
+}
+
+.timer-skip-btn {
   width: 34px; height: 34px;
   border-radius: 50%;
   border: 1px solid var(--border-subtle);
-  background: var(--bg-panel);
+  background: transparent;
   color: var(--text-secondary);
-  font-size: 0.75rem; cursor: pointer;
+  cursor: pointer;
   display: grid; place-items: center;
-  transition: background var(--transition), border-color var(--transition), color var(--transition);
+  transition: all var(--transition);
 }
-.timer-btn:hover {
-  background: var(--bg-hover);
+.timer-skip-btn:hover {
   border-color: var(--accent-warm);
   color: var(--accent-warm);
 }
