@@ -1,5 +1,16 @@
 // timer.js — Pomodoro timer (pomofocus-style)
 
+// Request notification permission on load
+if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
+}
+
+function sendTimerNotification(title, body) {
+    if ('Notification' in window && Notification.permission === 'granted') {
+        new Notification(title, { body: body, icon: 'assets/images/icon.png' });
+    }
+}
+
 var focusTime = 1 * 10;
 var shortBreak = 5 * 60;
 var longBreak = 15 * 60;
@@ -23,6 +34,11 @@ function countdown() {
   } else {
         pauseTimer();
         timerDone.play().catch(function(){});
+        if (currentMode === 'focus') {
+            sendTimerNotification('Time for a break!', 'Your focus session has ended.');
+        } else {
+            sendTimerNotification('Back to work!', 'Break is over — time to focus.');
+        }
         // Auto-advance to next mode
         if (currentMode === 'focus') {
             breakCount++;
