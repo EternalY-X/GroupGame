@@ -696,8 +696,13 @@ button { font-family: inherit; }
     max-height: 50vh;
   }
 
+
+
+}
+.sfx-play-btn.muted {
+  opacity: 0.4;
+  pointer-events: none;
+}
   .ctrl-btn.ctrl-active {
   color: var(--accent-warm);
-}
-
 }

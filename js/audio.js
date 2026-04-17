@@ -254,6 +254,7 @@ function changeVolume()
 // Each slider controls that sound's individual volume.
 
 var ambientSounds = {};  // key: file path, value: Audio object
+window.ambientSounds = ambientSounds;
 
 document.querySelectorAll('.sfx-play-btn').forEach(function (btn) {
   btn.addEventListener('click', function () {
